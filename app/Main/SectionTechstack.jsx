@@ -165,11 +165,11 @@ export const SectionTechstack = () => {
     ];
 
   return (
-    <section className="techstack">
+    <section className="techstack tech-pattern-bg">
         <div className="techstack-content">
             <div className="textbox">
                 <div className="subheadline-box opacity-blur" ref={subheadlineBoxRef} >
-                    <Layers className="subheadline-box-icon" />
+                    <Layers className="subheadline-box-icon accent-green" />
                     <h2 className="small-description grey" >Our Techstack</h2>
                 </div>
                 <div className="titlebox">
@@ -326,6 +326,18 @@ export const SectionTechstack = () => {
                                         <p className="small-description grey" >Design phase completed successfully. Tasks updated and prepared for review.</p>
                                     </div>
                                     <p className="small-description grey" >Nov 7</p>
+                                </div>
+                            </div>
+                            <div className="techstack-item-card techstack-item-card-4" >
+                                <div className="techstack-item-card-content techstack-item-card-content-4">
+                                    <div className="techstack-item-card-content-top">
+                                        <p className="description white" >Miro</p>
+                                        <img src="/logos/miro.svg" className="techstack-item-card-content-top-image" alt="Miro" />
+                                    </div>
+                                    <div className="techstack-item-card-content-bottom">
+                                        <p className="small-description grey" >Visual roadmap updated. Boards synced and shared with the client team.</p>
+                                    </div>
+                                    <p className="small-description grey" >Nov 8</p>
                                 </div>
                             </div>
                         </div>

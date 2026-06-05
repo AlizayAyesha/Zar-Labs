@@ -30,7 +30,7 @@
 .works-divider {
     width: 80vw;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(34, 197, 94, 0.15);
     align-self: center;
 }
 
@@ -50,7 +50,7 @@
 .works-content-top-divider {
     width: 80vw;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(34, 197, 94, 0.15);
     align-self: center;
 }
 
@@ -103,8 +103,8 @@
     height: 70vh;
     /* padding: 2vw; */
     border-radius: 25px;
-    /* box-shadow: inset 0 0 0 calc(1px + 0px) rgba(255, 255, 255, 0.075), inset 0 0 5vw rgba(255, 255, 255, 0.05);
-    background-color: rgba(255, 255, 255, 0.025); */
+    /* box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.075), inset 0 0 5vw rgba(34, 197, 94, 0.05);
+    background-color: rgba(34, 197, 94, 0.025); */
     position: relative;
     overflow: hidden;
 }
@@ -117,7 +117,7 @@
     height: 100%;
     z-index: 1;
     pointer-events: none;
-    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(255, 255, 255, 0.075), inset 0 0 5vw rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.075), inset 0 0 5vw rgba(34, 197, 94, 0.05);
     border-radius: 25px;
 }
 
@@ -168,8 +168,8 @@
     height: fit-content;
     padding: 1vh 1vw;
     border-radius: 25px;
-    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(255, 255, 255, 0.075), inset 0 0 2.5vw rgba(255, 255, 255, 0.05);
-    background-color: rgba(255, 255, 255, 0.025);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.075), inset 0 0 2.5vw rgba(34, 197, 94, 0.05);
+    background-color: rgba(34, 197, 94, 0.025);
     backdrop-filter: blur(8px);
 }
 
@@ -219,7 +219,7 @@
     height: 100%;
     border-radius: 25px;
     position: absolute;
-    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(255, 255, 255, 0.075), inset 0 0 5vw rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.075), inset 0 0 5vw rgba(34, 197, 94, 0.05);
     top: 0;
     left: 0;
     z-index: 2;
@@ -246,8 +246,8 @@
     height: fit-content;
     padding: 1vh 1vw;
     border-radius: 25px;
-    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(255, 255, 255, 0.075), inset 0 0 2.5vw rgba(255, 255, 255, 0.05);
-    background-color: rgba(255, 255, 255, 0.025);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.075), inset 0 0 2.5vw rgba(34, 197, 94, 0.05);
+    background-color: rgba(34, 197, 94, 0.025);
     backdrop-filter: blur(8px);
 }
 
@@ -281,7 +281,7 @@
 .works-industries-divider {
     width: 100%;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(34, 197, 94, 0.15);
 }
 
 .works-industries-item {
@@ -359,8 +359,23 @@
     height: 65vh;
     padding: 2.5vw;
     border-radius: 25px;
-    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(255, 255, 255, 0.075), inset 0 0 5vw rgba(255, 255, 255, 0.05);
-    background-color: rgba(255, 255, 255, 0.025);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.075), inset 0 0 5vw rgba(34, 197, 94, 0.05);
+    background-color: rgba(34, 197, 94, 0.025);
+}
+
+.casestudies-item--clickable {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.casestudies-item--clickable:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.15), inset 0 0 5vw rgba(34, 197, 94, 0.08);
+}
+
+.casestudies-item--clickable:focus-visible {
+    outline: 2px solid var(--zar-green);
+    outline-offset: 4px;
 }
 
 .casestudies-item-content {
@@ -389,8 +404,8 @@
     position: relative;
     width: fit-content;
     height: 4vh;
-    background-color: rgba(255, 255, 255, 0.025);
-    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(255, 255, 255, 0.075), inset 0 0 2.5vw rgba(255, 255, 255, 0.05);
+    background-color: rgba(34, 197, 94, 0.025);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.075), inset 0 0 2.5vw rgba(34, 197, 94, 0.05);
     backdrop-filter: blur(5px);
     z-index: 1;
     display: flex;
@@ -478,8 +493,13 @@
     display: flex;
     align-items: center;
     gap: 0.25vw;
-    transition: 0.5s ease;
+    padding: 0;
+    border: none;
+    background: transparent;
     cursor: pointer;
+    color: inherit;
+    font: inherit;
+    transition: 0.5s ease;
 }
 
 .casestudy-navigation-button:hover {
@@ -517,30 +537,123 @@
     z-index: 0;
 }
 
+.casestudy-top-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    max-width: 52rem;
+    text-align: center;
+}
+
+.casestudy-category {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.85rem;
+}
+
+.casestudy-hero-placeholder {
+    width: 40vw;
+    height: 40vh;
+}
+
 .casestudy-center {
     width: 100%;
     height: fit-content;
-    padding: 20vh 10vw;
-    padding-top: 10vh;
-    gap: 20vh;
+    padding: 12vh 10vw 16vh;
+    gap: 6vh;
     display: flex;
     flex-direction: column;
 }
 
 .casestudy-center-content {
-    width: 50%;
-    height: fit-content;
-    align-self: flex-end;
-    display: flex;
-    flex-direction: column;
-    gap: 5vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
 }
 
 .casestudy-center-item {
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 2.5vh;
+    gap: 1.25rem;
+    padding: 1.5rem 1.75rem;
+    border-radius: 16px;
+    border: 1px solid rgba(var(--zar-green-rgb), 0.15);
+    background: rgba(var(--zar-green-rgb), 0.04);
+}
+
+.casestudy-center-item-label {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--zar-green);
+    font-family: "SF PRO DISPLAY 600", sans-serif;
+}
+
+.casestudy-center-item-text {
+    margin: 0;
+    line-height: 165%;
+}
+
+.casestudy-summary {
+    margin: 0;
+    max-width: 52rem;
+    line-height: 155%;
+}
+
+.casestudy-scope-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.casestudy-scope-tag {
+    padding: 0.35rem 0.7rem;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-family: "SF PRO DISPLAY 600", sans-serif;
+    border: 1px solid rgba(var(--zar-green-rgb), 0.22);
+    background: rgba(var(--zar-green-rgb), 0.08);
+}
+
+.casestudy-results-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.casestudy-results-list li {
+    margin: 0;
+    position: relative;
+    padding-left: 1.25rem;
+    line-height: 155%;
+}
+
+.casestudy-results-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--zar-green);
+}
+
+@media (max-width: 768px) {
+    .casestudy-center-content {
+        grid-template-columns: 1fr;
+    }
 }
 
 .casestudy-center-item-column {

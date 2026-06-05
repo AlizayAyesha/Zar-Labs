@@ -8,7 +8,8 @@ import { TextPlugin } from 'gsap/TextPlugin';
 import { SplitText } from "gsap/all";
 import { ScrollTrigger } from "gsap/all";
 import { usePathname, useRouter } from 'next/navigation';
-import { Linkedin, Mail, Phone } from "lucide-react";
+import { Instagram, Mail, Phone } from "lucide-react";
+import { ZAR_LABS_EMAIL, ZAR_LABS_PHONE, ZAR_LABS_PHONE_DISPLAY } from "../config/contact";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, TextPlugin);
 
@@ -121,37 +122,51 @@ export const ContactPageSection = () => {
                   </div>
                 </div>
                 <div className="contact-content-column-row">
-                  <div className="contact-content-small-item opacity-blur" ref={contactItem2} >
-                    <img src="/logos/phone.svg" className="contact-content-small-item-icon" alt="" />
+                  <a
+                    href={`tel:${ZAR_LABS_PHONE}`}
+                    className="contact-content-small-item opacity-blur"
+                    ref={contactItem2}
+                    aria-label={`Call ${ZAR_LABS_PHONE_DISPLAY}`}
+                  >
+                    <Phone strokeWidth={2.5} className="contact-content-small-item-icon" />
                     <p className="small-description grey" >Call</p>
-                  </div>
+                  </a>
                   <div className="contact-content-small-item opacity-blur" ref={contactItem3} >
                     <Mail strokeWidth={2.5} className="contact-content-small-item-icon" />
                     <p className="small-description grey" >Email</p>
                   </div>
-                  <div className="contact-content-small-item opacity-blur" ref={contactItem4} >
-                    <img src="/logos/linkedin.svg" className="contact-content-small-item-icon" alt="" />
-                    <p className="small-description grey" >LinkedIn</p>
-                  </div>
+                  <a
+                    href="https://www.instagram.com/zar_labs/"
+                    className="contact-content-small-item opacity-blur"
+                    ref={contactItem4}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Zar Labs on Instagram"
+                  >
+                    <Instagram strokeWidth={2.5} className="contact-content-small-item-icon" />
+                    <p className="small-description grey" >Instagram</p>
+                  </a>
                 </div>
-                <div className="contact-content-item opacity-blur" ref={contactItem5} >
-                  <p className="small-description grey" >Videocall</p>
-                  <p className="description white" >Book a videocall</p>
+                <div className="contact-content-item" ref={contactItem5} >
+                  <p className="small-description grey" >Call</p>
+                  <a href={`tel:${ZAR_LABS_PHONE}`} className="description white contact-content-link">
+                    {ZAR_LABS_PHONE_DISPLAY}
+                  </a>
                 </div>
-                <div className="contact-content-item opacity-blur" ref={contactItem6} >
+                <div className="contact-content-item" ref={contactItem6} >
                   <p className="small-description grey" >Email</p>
-                  <p className="description white" >admin@dialedweb.com</p>
+                  <a href={`mailto:${ZAR_LABS_EMAIL}`} className="description white contact-content-link">
+                    {ZAR_LABS_EMAIL}
+                  </a>
                 </div>
-                <div className="contact-content-item opacity-blur" ref={contactItem7} >
-                  <p className="small-description grey" >Address</p>
-                  <p className="description white" >545 La Jolla Village Drive</p>
-                  <p className="description white" >San Diego</p>
-                  <p className="description white" >California</p>
+                <div className="contact-content-item" ref={contactItem7} >
+                  <p className="small-description grey" >Location</p>
+                  <p className="description white" >Karachi, Pakistan</p>
                 </div>
               </div>
             </div>
             <div className="contact-content-right opacity-blur" ref={imageWrapperRef} >
-              <img src="/images/dwlogo.webp" className="contact-content-right-image" ref={imageRef} alt="" />
+              <img src="/images/zarlabs-logo.webp" className="contact-content-right-image" ref={imageRef} alt="Zar Labs" />
             </div>
           </div>
         </div>

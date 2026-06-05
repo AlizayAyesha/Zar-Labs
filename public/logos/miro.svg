@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Miro">
+  <rect width="48" height="48" rx="7" fill="#FFD02F"/>
+  <rect x="10" y="12" width="10" height="24" rx="2" fill="#050038"/>
+  <rect x="24" y="12" width="14" height="10" rx="2" fill="#FF6575"/>
+  <rect x="24" y="26" width="14" height="10" rx="2" fill="#1AD1FF"/>
+</svg>

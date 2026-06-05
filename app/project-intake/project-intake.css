@@ -1,0 +1,265 @@
+.project-intake {
+  width: 100%;
+  height: fit-content !important;
+  min-height: 100vh;
+  overflow: visible !important;
+  padding: 18vh 10vw 10vh;
+}
+
+.project-intake-content {
+  width: 100%;
+  max-width: 52rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4vh;
+}
+
+.project-intake-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+  padding-bottom: 2vh;
+  border-bottom: 1px solid rgba(var(--zar-green-rgb), 0.15);
+}
+
+.project-intake-eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--zar-green);
+  font-family: "SF PRO DISPLAY 600", sans-serif;
+}
+
+.project-intake-title {
+  margin: 0;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  line-height: 1.05;
+  color: white;
+  font-family: "SF PRO DISPLAY 700", sans-serif;
+}
+
+.project-intake-lead {
+  margin: 0;
+  max-width: 42rem;
+  font-size: 1.05rem;
+  line-height: 160%;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: "Causten Regular", sans-serif;
+}
+
+.project-intake-form {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.project-intake-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.project-intake-block-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.project-intake-block-num {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--zar-green);
+  font-family: "SF PRO DISPLAY 600", sans-serif;
+}
+
+.project-intake-block-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: white;
+  font-family: "SF PRO DISPLAY 600", sans-serif;
+}
+
+.project-intake-block-desc {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 150%;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Causten Regular", sans-serif;
+}
+
+.project-intake-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+.project-intake-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.project-intake-field--full {
+  grid-column: 1 / -1;
+}
+
+.project-intake-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "SF PRO DISPLAY 600", sans-serif;
+}
+
+.project-intake-input,
+.project-intake-select,
+.project-intake-textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  font-family: "Causten Regular", sans-serif;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-intake-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2322c55e' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.project-intake-input:focus,
+.project-intake-select:focus,
+.project-intake-textarea:focus {
+  border-color: rgba(var(--zar-green-rgb), 0.5);
+  box-shadow: 0 0 0 3px rgba(var(--zar-green-rgb), 0.12);
+}
+
+.project-intake-textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.project-intake-textarea--large {
+  min-height: 10rem;
+}
+
+.project-intake-checklist {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem 1.5rem;
+  padding: 1.25rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.project-intake-checklist--wide {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.project-intake-check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 140%;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: "Causten Regular", sans-serif;
+}
+
+.project-intake-check-row input {
+  margin-top: 0.2rem;
+  accent-color: var(--zar-green);
+  flex-shrink: 0;
+}
+
+.project-intake-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(var(--zar-green-rgb), 0.15);
+}
+
+.project-intake-btn {
+  padding: 0.9rem 1.5rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.9rem;
+  font-family: "SF PRO DISPLAY 600", sans-serif;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.project-intake-btn:active {
+  transform: scale(0.98);
+}
+
+.project-intake-btn--primary {
+  background: var(--zar-green);
+  color: #041108;
+}
+
+.project-intake-btn--secondary {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(var(--zar-green-rgb), 0.4);
+}
+
+.project-intake-success {
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(var(--zar-green-rgb), 0.3);
+  background: rgba(var(--zar-green-rgb), 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  line-height: 150%;
+}
+
+.project-intake-error {
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  line-height: 150%;
+}
+
+.project-intake-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .project-intake {
+    padding: 22vw 5vw 10vh;
+  }
+
+  .project-intake-fields,
+  .project-intake-checklist,
+  .project-intake-checklist--wide {
+    grid-template-columns: 1fr;
+  }
+
+  .project-intake-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .project-intake-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

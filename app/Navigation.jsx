@@ -42,7 +42,7 @@ export const Navigation = () => {
     <div className="navigation-wrapper">
         <div className="navigation-inside" ref={navigationBar} >
             <div className="navigation-inside-left">
-                <img src="/images/dwlogo.webp" className="navigation-inside-left-image" alt="" />
+                <img src="/images/zarlabs-logo.webp" className="navigation-inside-left-image" alt="Zar Labs" />
             </div>
             <div className="navigation-inside-big" ref={navigationBarCenter} >
                 <p className="small-description white hover-text-white opacity" ref={navigationBarCenterRef1} onClick={() => handleNavigate('/')} >Home</p>

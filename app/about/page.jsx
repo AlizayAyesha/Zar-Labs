@@ -2,8 +2,8 @@ import "./about.css";
 import { AboutPageSection } from "./AboutPageSection";
 
 export const metadata = {
-  title: 'Dialedweb | About Us',
-  description: "Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality.",
+  title: 'Zar Labs | About Us',
+  description: "Zar Labs helps businesses transform ideas into scalable digital products, intelligent automation, and technology-driven growth.",
   openGraph: {
     title: 'About Us',
   },

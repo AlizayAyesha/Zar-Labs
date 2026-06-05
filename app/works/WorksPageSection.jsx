@@ -11,10 +11,27 @@ import gsap from "gsap";
 import SplitText from "gsap/src/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useCalendly } from "../Main/CalendlyProvider";
+import { CASE_STUDIES } from "./case-studies-data";
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
 export const WorksPageSection = () => {
+  const { openCalendly } = useCalendly();
+  const router = useRouter();
+  const pathname = usePathname();
+  const isAnimatingRef = useRef(false);
+
+  const handleNavigate = (path) => {
+    if (pathname === path || isAnimatingRef.current) return;
+    router.prefetch(path);
+    isAnimatingRef.current = true;
+    window.dispatchEvent(new CustomEvent("startAnimation"));
+    setTimeout(() => {
+      router.push(path);
+      isAnimatingRef.current = false;
+    }, 750);
+  };
 
   // ANIMATIONS
   const titleRef = useRef()
@@ -313,9 +330,9 @@ export const WorksPageSection = () => {
                   <div className="works-item" >
                     <div className="works-item-last-content" >
                       <p className="description white" >Be our next client in this section!</p>
-                      <h2 className="subheadline white" >Let us get you a coffee.</h2>
-                      <div className="contact-button-wrapper">
-                        <button className="contact-button-white" >
+                      <h2 className="subheadline white" >Let&apos;s connect and build something great.</h2>
+                      <div className="contact-button-wrapper" onClick={openCalendly}>
+                        <button className="contact-button-white" type="button">
                           <span>
                             <span className="contact-button-container-white">
                               <span className="contact-button-primary-white"></span>
@@ -412,100 +429,52 @@ export const WorksPageSection = () => {
                 <div className="titlebox-medium-gradient" />
                 <h1 className="subheadline white" ref={subtitleRef2} >We have a diverse portfolio of <br /> successful case studies</h1>
               </div>
-              <p className="description grey" ref={subdescriptionRef2} >Case studies offer a unique opportunity to explore real-world examples of challenges, solutions, and results.</p>
+              <p className="description grey" ref={subdescriptionRef2} >Real projects across AI, SaaS, integrations, cloud, analytics, and growth — see how we deliver measurable results.</p>
             </div>
             <div className="casestudies-carousel-wrapper opacity-blur" ref={carouselWrapperRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
               <div className="casestudies-carousel" ref={emblaRef} >
                 <div className="casestudies-carousel-row">
                   <div className="casestudies-item-padding" />
-                  <div className="casestudies-item" >
-                    <div className="casestudies-item-content">
-                      <div className="casestudies-item-content-textbox">
-                        <div className="subheadline-box" >
-                          <Zap className="subheadline-box-icon" />
-                          <h2 className="small-description grey" >Marketing</h2>
-                        </div>
-                        <h3 className="small-subheadline white" >Digital Market Future</h3>
-                        <p className="description grey" >The New Era of the Digital Landscape: Where Do We Think the Market Is Going?</p>
-                      </div>
-                      <div className="casestudies-item-content-imagebox" >
-                        <div className="button casestudies-item-content-imagebox-button" >
-                          <div className="button-content">
-                            <span className="small-description white">Read More</span>
-                            <span className="small-description white">Read More</span>
+                  {CASE_STUDIES.map((study) => (
+                    <div
+                      key={study.slug}
+                      className="casestudies-item casestudies-item--clickable"
+                      role="link"
+                      tabIndex={0}
+                      onClick={() => handleNavigate(`/works/${study.slug}`)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          handleNavigate(`/works/${study.slug}`);
+                        }
+                      }}
+                    >
+                      <div className="casestudies-item-content">
+                        <div className="casestudies-item-content-textbox">
+                          <div className="subheadline-box">
+                            <Zap className="subheadline-box-icon" />
+                            <h2 className="small-description grey">{study.category}</h2>
                           </div>
-                          <ArrowUpRight className="casestudies-item-content-imagebox-button-icon" />
+                          <h3 className="small-subheadline white">{study.title}</h3>
+                          <p className="description grey">{study.excerpt}</p>
                         </div>
-                        <img src="/casestudy/cs1.webp" className="casestudies-item-content-image" alt="" />
+                        <div className="casestudies-item-content-imagebox">
+                          <div className="button casestudies-item-content-imagebox-button">
+                            <div className="button-content">
+                              <span className="small-description white">Read More</span>
+                              <span className="small-description white">Read More</span>
+                            </div>
+                            <ArrowUpRight className="casestudies-item-content-imagebox-button-icon" />
+                          </div>
+                          <img
+                            src={study.carouselImage}
+                            className="casestudies-item-content-image"
+                            alt={study.title}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="casestudies-item" >
-                    <div className="casestudies-item-content">
-                      <div className="casestudies-item-content-textbox">
-                        <div className="subheadline-box" >
-                          <Zap className="subheadline-box-icon" />
-                          <h2 className="small-description grey" >Marketing</h2>
-                        </div>
-                        <h3 className="small-subheadline white" >Tech Evolution Ahead</h3>
-                        <p className="description grey" >The New Era of the Digital Landscape: Where Do We Think the Market Is Going?</p>
-                      </div>
-                      <div className="casestudies-item-content-imagebox" >
-                        <div className="button casestudies-item-content-imagebox-button">
-                          <div className="button-content">
-                            <span className="small-description white">Read More</span>
-                            <span className="small-description white">Read More</span>
-                          </div>
-                          <ArrowUpRight className="casestudies-item-content-imagebox-button-icon" />
-                        </div>
-                        <img src="/casestudy/cs4.webp" className="casestudies-item-content-image" alt="" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="casestudies-item" >
-                    <div className="casestudies-item-content">
-                      <div className="casestudies-item-content-textbox">
-                        <div className="subheadline-box" >
-                          <Zap className="subheadline-box-icon" />
-                          <h2 className="small-description grey" >Marketing</h2>
-                        </div>
-                        <h3 className="small-subheadline white" >Navigating Trends</h3>
-                        <p className="description grey" >The New Era of the Digital Landscape: Where Do We Think the Market Is Going?</p>
-                      </div>
-                      <div className="casestudies-item-content-imagebox" >
-                        <div className="button casestudies-item-content-imagebox-button">
-                          <div className="button-content">
-                            <span className="small-description white">Read More</span>
-                            <span className="small-description white">Read More</span>
-                          </div>
-                          <ArrowUpRight className="casestudies-item-content-imagebox-button-icon" />
-                        </div>
-                        <img src="/casestudy/cs3.webp" className="casestudies-item-content-image" alt="" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="casestudies-item" >
-                    <div className="casestudies-item-content">
-                      <div className="casestudies-item-content-textbox">
-                        <div className="subheadline-box" >
-                          <Zap className="subheadline-box-icon" />
-                          <h2 className="small-description grey" >Marketing</h2>
-                        </div>
-                        <h3 className="small-subheadline white" >Innovation in Motion</h3>
-                        <p className="description grey" >The New Era of the Digital Landscape: Where Do We Think the Market Is Going?</p>
-                      </div>
-                      <div className="casestudies-item-content-imagebox" >
-                        <div className="button casestudies-item-content-imagebox-button">
-                          <div className="button-content">
-                            <span className="small-description white">Read More</span>
-                            <span className="small-description white">Read More</span>
-                          </div>
-                          <ArrowUpRight className="casestudies-item-content-imagebox-button-icon" />
-                        </div>
-                        <img src="/casestudy/cs2.webp" className="casestudies-item-content-image" alt="" />
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                   <div className="casestudies-item-padding" />
                 </div>
               </div>

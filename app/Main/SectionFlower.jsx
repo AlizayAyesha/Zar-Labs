@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import SplitText from "gsap/src/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -57,9 +57,6 @@ export const SectionFlower = () => {
         }
     })
 
-    const imageRef1 = useRef();
-    const imageRef2 = useRef();
-
     const textRef1 = useRef();
     const textRef2 = useRef();
     const textRef3 = useRef();
@@ -70,9 +67,6 @@ export const SectionFlower = () => {
     const textRef8 = useRef();
   
     useEffect(() => {
-  
-      gsap.fromTo(imageRef1.current, { width: 0, opacity: 0 }, { width: "5vw", opacity: 1, duration: 1, scrollTrigger: { trigger: imageRef1.current, start: "top 95%" } })
-      gsap.fromTo(imageRef2.current, { width: 0, opacity: 0 }, { width: "5vw", opacity: 1, duration: 1, scrollTrigger: { trigger: imageRef2.current, start: "top 95%" } })
 
       const textRefSplit1 = new SplitText(textRef1.current, { type: "chars" });
       const textRefSplit2 = new SplitText(textRef2.current, { type: "chars" });
@@ -115,11 +109,6 @@ export const SectionFlower = () => {
             <span>
               <h1 className="subheadline white" ref={textRef3} >Digital</h1>
             </span>
-            <span>
-              <div className="flower-content-right-content-item" ref={imageRef1} >
-                <img src="/images/iphoneoptimized.png" className="flower-content-right-content-item-image" alt="" />
-              </div>
-            </span>
           </div>
           <div className="flower-content-textbox-item" >
             <span>
@@ -135,11 +124,6 @@ export const SectionFlower = () => {
           <div className="flower-content-textbox-item" >
             <span>
               <h1 className="subheadline white" ref={textRef7} >Vision</h1>
-            </span>
-            <span>
-              <div className="flower-content-right-content-item" ref={imageRef2} >
-                <img src="/images/iphoneoptimized.png" className="flower-content-right-content-item-image" alt="" />
-              </div>
             </span>
             <span>
               <h1 className="subheadline white" ref={textRef8} >Bloom</h1>

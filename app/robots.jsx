@@ -5,6 +5,6 @@ export default function robots() {
         allow: '/',
         disallow: '/private/',
       },
-      sitemap: 'https://dialedweb.com/sitemap.xml',
+      sitemap: 'https://zarlabs.com/sitemap.xml',
     }
   }

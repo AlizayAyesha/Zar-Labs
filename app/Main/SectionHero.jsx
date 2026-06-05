@@ -108,7 +108,7 @@ export const SectionHero = () => {
   };
 
   return (
-    <section className="hero">
+    <section className="hero tech-pattern-bg">
       <div className="hero-background-element-small" />
       <div className="hero-background-element-grid-small" />
       <div className="hero-content">

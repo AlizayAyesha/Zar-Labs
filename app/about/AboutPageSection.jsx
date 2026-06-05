@@ -1,202 +1,290 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReactLenis } from 'lenis/react'
 import { SectionFooter } from "../Main/SectionFooter";
 import gsap from "gsap";
-import { TextPlugin } from 'gsap/TextPlugin';
 import { SplitText } from "gsap/all";
 import { ScrollTrigger } from "gsap/all";
+import { ChevronDown } from "lucide-react";
+import { useCalendly } from "../Main/CalendlyProvider";
+import { AboutPartnersSection } from "./AboutPartnersSection";
+import { AboutTeamSection } from "./AboutTeamSection";
 
-gsap.registerPlugin(SplitText, ScrollTrigger, TextPlugin);
+gsap.registerPlugin(SplitText, ScrollTrigger);
+
+const STICKY_SERVICES = [
+    {
+        num: "01",
+        title: <>AI Solutions &<br />Automation</>,
+        description: "Deploy intelligent systems that automate workflows, streamline operations, and enhance customer experiences. From AI chatbots and voice agents to RAG knowledge bases and business process automation, we help organizations operate smarter and scale faster.",
+        image: "/images/mockup12.webp",
+    },
+    {
+        num: "02",
+        title: <>Custom Software &<br />SaaS Development</>,
+        description: "Build secure, scalable, and high-performance digital products tailored to your business. We develop web applications, SaaS platforms, enterprise portals, CRM systems, dashboards, and custom business software designed for long-term growth.",
+        image: "/images/macbook.webp",
+    },
+    {
+        num: "03",
+        title: <>Systems Integration &<br />Digital Ecosystems</>,
+        description: "Connect your technology stack into a unified ecosystem. We integrate CRMs, ERPs, payment gateways, third-party APIs, cloud services, analytics platforms, and business tools to eliminate silos and improve operational efficiency.",
+        image: "/images/mockup7.webp",
+    },
+    {
+        num: "04",
+        title: <>DevOps, Cloud &<br />Infrastructure</>,
+        description: "Establish a reliable technology foundation with modern cloud architecture, CI/CD pipelines, deployment automation, monitoring systems, security hardening, and infrastructure management designed for scalability and resilience.",
+        image: "/images/abs.webp",
+    },
+    {
+        num: "05",
+        title: <>Data, Analytics &<br />Business Intelligence</>,
+        description: "Transform data into actionable insights through analytics dashboards, KPI tracking, reporting systems, and business intelligence solutions that support informed decision-making.",
+        image: "/images/test17.webp",
+    },
+    {
+        num: "06",
+        title: <>Search Visibility &<br />Growth Engineering</>,
+        description: "Improve discoverability, performance, and digital presence through technical SEO, Core Web Vitals optimization, structured data implementation, search strategy, and conversion-focused digital experiences.",
+        image: "/images/test19.webp",
+    },
+];
+
+const PRINCIPLES = [
+    {
+        id: "innovation",
+        title: "Innovation",
+        description: "Leveraging modern technologies to create competitive advantages.",
+    },
+    {
+        id: "reliability",
+        title: "Reliability",
+        description: "Building secure, scalable, and maintainable solutions that businesses can depend on.",
+    },
+    {
+        id: "impact",
+        title: "Impact",
+        description: "Delivering technology that produces measurable business outcomes.",
+    },
+];
+
+const WHAT_WE_DO = [
+    "Custom Software Development",
+    "SaaS Platforms",
+    "AI Solutions & Automation",
+    "Enterprise Web Applications",
+    "E-Commerce Systems",
+    "Digital Infrastructure",
+    "UI/UX Design",
+    "Data & Analytics",
+    "Technical Consulting",
+    "Managed Support & Maintenance",
+];
 
 export const AboutPageSection = () => {
-    // ANIMATIONS
+    const { openCalendly } = useCalendly();
+    const headlineRef = useRef();
+    const bodyRef = useRef();
+    const imageRef = useRef();
+    const stickyContainerRef = useRef(null);
+    const partnersRef = useRef(null);
+    const teamRef = useRef(null);
+    const [openPrinciple, setOpenPrinciple] = useState(null);
 
-    const titleRef = useRef()
-    const titleRef2 = useRef()
-    const descriptionRef = useRef()
-    const lineRef = useRef()
-    const itemRefs = useRef([]);
-
-    const teamMembers = [
-        { name: "Idan Zeidman", title: "Co-CEO & Co-Founder" },
-        { name: "Lorenzo Noya", title: "Co-CEO & Co-Founder" },
-        { name: "Matvey Vasilyev", title: "COO & Co-Founder" },
-        { name: "Rainer Ahi", title: "CTO" },
-        { name: "Romet Kriks", title: "Motion Graphics Designer" },
-        { name: "Sardor Xujamov", title: "Visualization Expert" },
-    ];
+    const togglePrinciple = (id) => {
+        setOpenPrinciple((current) => (current === id ? null : id));
+    };
 
     useEffect(() => {
+        const headlineSplit = new SplitText(headlineRef.current, { type: "words" });
+        gsap.fromTo(headlineSplit.words, { willChange: "opacity", filter: "blur(8px)", opacity: 0 }, { opacity: 1, filter: "blur(0px)", stagger: 0.025, ease: "sine", scrollTrigger: { trigger: headlineRef.current, start: "top 95%", end: "bottom center", scrub: true } });
 
-        // title animation
-        const titleSplit = new SplitText(titleRef.current, { type: "chars" });
-        gsap.fromTo(titleSplit.chars, { 'will-change': 'opacity, transform', filter: 'blur(8px)', opacity: 0, yPercent: 50 }, { delay: 0.2, opacity: 1, filter: 'blur(0px)', yPercent: 0, stagger: 0.02, duration: 0.75, ease: "power1" });
+        const bodyEls = bodyRef.current?.querySelectorAll(".about-whyus-paragraph, .about-principles-heading, .about-principle-dropdown, .about-what-we-do-item");
+        if (bodyEls?.length) {
+            gsap.fromTo(bodyEls, { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.06, ease: "power2.out", scrollTrigger: { trigger: bodyRef.current, start: "top 90%", toggleActions: "play none none none" } });
+        }
 
-        // description animation
-        gsap.to(descriptionRef.current, { opacity: 1, filter: 'blur(0px)', duration: 1, delay: 0.6 })
+        if (imageRef.current) {
+            gsap.fromTo(imageRef.current, { opacity: 0, scale: 0.96, filter: "blur(6px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", ease: "power2.out", scrollTrigger: { trigger: imageRef.current, start: "top 92%", toggleActions: "play none none none" } });
+        }
 
-        // line animation
-        gsap.fromTo(lineRef.current, { opacity: 0, filter: 'blur(8px)' }, { opacity: 1, filter: 'blur(0px)', duration: 0.5, delay: 0.5 })
+        const partnerEls = partnersRef.current?.querySelectorAll(".about-partners-header, .about-partner-card");
+        if (partnerEls?.length) {
+            gsap.fromTo(partnerEls, { opacity: 0, y: 48 }, { opacity: 1, y: 0, stagger: 0.12, duration: 0.85, ease: "power3.out", scrollTrigger: { trigger: partnersRef.current, start: "top 88%", toggleActions: "play none none none" } });
+        }
 
-        // title 2 animation
-        const titleSplit2 = new SplitText(titleRef2.current, { type: "words" });
-        gsap.fromTo(titleSplit2.words, { 'will-change': 'opacity', filter: 'blur(8px)', opacity: 0 }, { opacity: 1, filter: 'blur(0px)', stagger: 0.025, ease: 'sine', scrollTrigger: { trigger: titleRef2.current, start: "top 95%", end: "bottom center", scrub: true } });
-
-        // team member boxes animations
-        itemRefs.current.forEach((item, index) => {
-            gsap.fromTo(item, 
-              { yPercent: 100, opacity: 0, filter: "blur(8px)" },
-              {
-                yPercent: 0,
-                opacity: 1,
-                filter: "blur(0px)",
-                duration: 0.75,
-                delay: index * 0.2,
-                ease: "power3",
-                scrollTrigger: {
-                  trigger: ".five-content",
-                  start: "top bottom"
-                }
-              }
-            );
-          });
-
-      }, [])
-
-    // STICKY SECTION
-
-    const item1Ref = useRef(null);
-    const item2Ref = useRef(null);
-    const item3Ref = useRef(null);
-    const item4Ref = useRef(null);
+        const teamEls = teamRef.current?.querySelectorAll(".about-team-header, .about-team-card, .about-team-units");
+        if (teamEls?.length) {
+            gsap.fromTo(teamEls, { opacity: 0, y: 40 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.75, ease: "power3.out", scrollTrigger: { trigger: teamRef.current, start: "top 88%", toggleActions: "play none none none" } });
+        }
+    }, []);
 
     useEffect(() => {
-        const refs = [item1Ref, item2Ref, item3Ref, item4Ref];
+        const items = stickyContainerRef.current?.querySelectorAll(".about-sticky-item");
+        if (!items?.length) return;
 
-        refs.forEach((ref, position) => {
-            const el = ref.current;
-            const isLast = position === refs.length - 1;
+        const triggers = [];
+
+        items.forEach((el, position) => {
+            const isLast = position === items.length - 1;
 
             gsap.set(el, { willChange: "transform, filter" });
 
             const timeline = gsap.timeline({
                 scrollTrigger: {
                     trigger: el,
-                    start: 'center center',
-                    end: '350%',
+                    start: "center center",
+                    end: "350%",
                     scrub: true,
                 },
             });
 
             timeline
             .to(el, {
-                ease: 'none',
-                startAt: { filter: 'blur(0px)' },
-                filter: isLast ? 'blur(0px)' : 'blur(3px)',
+                ease: "none",
+                startAt: { filter: "blur(0px)" },
+                filter: isLast ? "blur(0px)" : "blur(3px)",
                 scrollTrigger: {
                     trigger: el,
-                    start: 'center center',
-                    end: '+=100%',
+                    start: "center center",
+                    end: "+=100%",
                     scrub: true,
                 },
             }, 0)
             .to(el, {
-                ease: 'none',
+                ease: "none",
                 scale: isLast ? 1 : 0.55,
                 yPercent: isLast ? 0 : -45,
             }, 0);
+
+            triggers.push(timeline.scrollTrigger);
         });
+
+        return () => {
+            triggers.forEach((trigger) => trigger?.kill());
+        };
     }, []);
 
   return (
     <ReactLenis root>
       <section className="about">
         <div className="about-content">
-            <div className="about-content-top">
-                <div className="about-content-textbox">
-                    <div className="titlebox">
-                        <div className="titlebox-gradient" />
-                        <h1 className="headline white" ref={titleRef} >A Global Network Of Talent</h1>
-                    </div>
-                    <p className="description grey opacity-blur" ref={descriptionRef} >We&apos;ve assembled a team of dedicated professionals from diverse backgrounds who share the same passion for your brand as you do.</p>
-                </div>
-                <div className="about-divider" ref={lineRef} />
-            </div>
-            <div className="about-team">
-                <div className="about-team-container">
-                    {teamMembers.map((member, index) => (
-                        <div className="about-team-item" key={index} ref={el => itemRefs.current[index] = el} >
-                            <p className="description white" >{member.name}</p>
-                            <p className="description white" >{member.title}</p>
+            <div className="about-whyus">
+                <p className="description about-whyus-description grey">Why us</p>
+                <h2 className="headline about-whyus-headline white" ref={headlineRef}>
+                    About <span className="accent-green">Zar Labs</span>
+                </h2>
+                <div className="about-whyus-body" ref={bodyRef}>
+                    <div className="about-whyus-image-col">
+                        <div className="about-whyus-imageframe" ref={imageRef}>
+                            <img src="/images/brandlogo.jpeg" className="about-whyus-image" alt="Zar Labs brand" />
                         </div>
-                    ))}
+                    </div>
+                    <div className="about-whyus-text-col">
+                    <p className="subheadline about-whyus-paragraph white">
+                        At <span className="accent-green">Zar Labs</span>, we help businesses transform ideas into scalable digital products, intelligent automation systems, and technology-driven growth opportunities.
+                    </p>
+                    <p className="description about-whyus-paragraph grey">
+                        We believe technology should do more than exist—it should solve real business challenges, improve operational efficiency, create better customer experiences, and generate measurable results.
+                    </p>
+                    <p className="description about-whyus-paragraph grey">
+                        Our team specializes in building modern websites, custom software platforms, SaaS products, AI-powered solutions, business automation systems, and digital infrastructure that enable organizations to scale with confidence.
+                    </p>
+                    <p className="description about-whyus-paragraph grey">
+                        From startups launching their first product to established companies modernizing legacy systems, we work closely with our clients to understand their goals, identify opportunities, and deliver solutions that create long-term value.
+                    </p>
+                    <p className="description about-whyus-paragraph grey">
+                        What sets <span className="accent-green">Zar Labs</span> apart is our ability to combine software engineering, artificial intelligence, automation, design, and strategic consulting into a unified approach. Rather than delivering isolated services, we build complete digital ecosystems that support business growth at every stage.
+                    </p>
+                    <p className="description about-whyus-paragraph grey">
+                        Through our broader technology ecosystem and strategic collaboration with Vyzion Systems, we are able to support projects ranging from custom business applications and AI implementation to enterprise modernization and digital transformation initiatives.
+                    </p>
+                    <div className="about-principles">
+                        <h3 className="about-principles-heading white">Every project we undertake is guided by three principles:</h3>
+                        {PRINCIPLES.map((principle) => {
+                            const isOpen = openPrinciple === principle.id;
+                            return (
+                                <div
+                                    key={principle.id}
+                                    className={`about-principle-dropdown${isOpen ? " is-open" : ""}`}
+                                >
+                                    <button
+                                        type="button"
+                                        className="about-principle-trigger"
+                                        onClick={() => togglePrinciple(principle.id)}
+                                        aria-expanded={isOpen}
+                                    >
+                                        <span className="accent-green">{principle.title}</span>
+                                        <ChevronDown className="about-principle-icon" aria-hidden="true" />
+                                    </button>
+                                    <div className="about-principle-panel">
+                                        <p className="description about-principle-content grey">{principle.description}</p>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <p className="description about-whyus-paragraph grey">
+                        At <span className="accent-green">Zar Labs</span>, we don&apos;t simply build software. We help organizations leverage technology as a catalyst for growth, efficiency, and long-term success.
+                    </p>
+                    <div className="about-what-we-do">
+                        <h3 className="subheadline about-what-we-do-title white">What We Do</h3>
+                        <ul className="about-what-we-do-list">
+                            {WHAT_WE_DO.map((item) => (
+                                <li key={item} className="description about-what-we-do-item grey">{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    </div>
                 </div>
             </div>
             <div className="about-divider" />
-            <div className="about-whyus" >
-                <p className="description about-whyus-description grey" >Why us</p>
-                <p className="subheadline about-whyus-subheadline white" ref={titleRef2} >At DialedWeb, we embody the startup mindset — dynamic, innovative, and hungry to make a difference. We don&apos;t just create amazing works; we partner with our clients to revolutionize their industries through groundbreaking digital experiences. From redefining brand engagement to boosting conversions, every project we take on is an opportunity to challenge the norm, deliver excellence, and leave an impact.</p>
-            </div>
+            <AboutTeamSection sectionRef={teamRef} />
             <div className="about-divider" />
-            <div className="about-sticky-container">
-				<div className="about-sticky-item" ref={item1Ref} >
-                    <div className="about-sticky-item-left">
-                        <div className="about-sticky-item-left-textbox">
-                            <h1 className="headline white" >3D/2D <br /> Animation</h1>
-                            <p className="description about-sticky-item-left-textbox-description grey" >Unlock the power of storytelling with our cutting-edge 2D and 3D animation. Whether you want to create vibrant characters or immersive worlds, our team combines artistic flair with technical expertise to bring your vision to life.</p>
+            <AboutPartnersSection sectionRef={partnersRef} />
+            <div className="about-divider" />
+            <div className="about-services-intro">
+                <h1 className="headline about-services-heading white">
+                    Services <span className="accent-green">we provide</span>
+                </h1>
+            </div>
+            <div className="about-sticky-container" ref={stickyContainerRef}>
+                {STICKY_SERVICES.map((service) => (
+                    <div
+                        key={service.num}
+                        className="about-sticky-item"
+                    >
+                        <div className="about-sticky-item-left">
+                            <div className="about-sticky-item-left-textbox">
+                                <h1 className="headline white">{service.title}</h1>
+                                <p className="about-sticky-item-left-textbox-description grey">{service.description}</p>
+                            </div>
+                            <h1 className="headline white">({service.num})</h1>
                         </div>
-                        <h1 className="headline white" >(01)</h1>
-                    </div>
-                    <div className="about-sticky-item-right">
-                        <div className="about-sticky-item-right-imagebox">
-                            <img src="/images/mockup4.webp" className="about-sticky-item-right-image" alt="" />
-                        </div>
-                    </div>
-                </div>
-				<div className="about-sticky-item" ref={item2Ref} >
-                    <div className="about-sticky-item-left">
-                        <div className="about-sticky-item-left-textbox">
-                            <h1 className="headline white" >AI Tuning</h1>
-                            <p className="description about-sticky-item-left-textbox-description grey" >Harness the potential of artificial intelligence to elevate your projects with our AI Tuning. By integrating intelligent solutions, we help you achieve precision and creativity that stand out in the competitive landscape.</p>
-                        </div>
-                        <h1 className="headline white" >(02)</h1>
-                    </div>
-                    <div className="about-sticky-item-right">
-                        <div className="about-sticky-item-right-imagebox">
-                            <img src="/images/mockup12.webp" className="about-sticky-item-right-image" alt="" />
+                        <div className="about-sticky-item-right">
+                            <div className="about-sticky-item-right-imagebox">
+                                <img src={service.image} className="about-sticky-item-right-image" alt="" />
+                            </div>
                         </div>
                     </div>
-                </div>
-				<div className="about-sticky-item" ref={item3Ref} >
-                    <div className="about-sticky-item-left">
-                        <div className="about-sticky-item-left-textbox">
-                            <h1 className="headline white" >AR VR</h1>
-                            <p className="description about-sticky-item-left-textbox-description grey" >Step into the future of interactive experiences with our Augmented Reality (AR) and Virtual Reality (VR) offerings. We create captivating environments that allow users to engage with your content in thrilling new ways, merging the digital and real worlds seamlessly.</p>
-                        </div>
-                        <h1 className="headline white" >(03)</h1>
-                    </div>
-                    <div className="about-sticky-item-right">
-                        <div className="about-sticky-item-right-imagebox">
-                            <img src="/images/mockup7.webp" className="about-sticky-item-right-image" alt="" />
-                        </div>
-                    </div>
-                </div>
-				<div className="about-sticky-item" ref={item4Ref} >
-                    <div className="about-sticky-item-left">
-                        <div className="about-sticky-item-left-textbox">
-                            <h1 className="headline white" >VFX</h1>
-                            <p className="description about-sticky-item-left-textbox-description grey" >Transform your visuals into stunning spectacles with our top-notch Visual Effects (VFX). From breathtaking explosions to fantastical landscapes, we add that extra layer of magic that captivates viewers.</p>
-                        </div>
-                        <h1 className="headline white" >(04)</h1>
-                    </div>
-                    <div className="about-sticky-item-right">
-                        <div className="about-sticky-item-right-imagebox">
-                            <img src="/images/mockup11.webp" className="about-sticky-item-right-image" alt="" />
-                        </div>
-                    </div>
-                </div>
+                ))}
 			</div>
+            <div className="about-consultation-cta">
+                <p className="description grey about-consultation-eyebrow">Let&apos;s talk</p>
+                <h2 className="headline about-consultation-title white">
+                    Don&apos;t know where to start?
+                </h2>
+                <p className="description about-consultation-text grey">
+                    Get a consultation from us — we know what&apos;s best for{" "}
+                    <span className="accent-green">your business</span>.
+                </p>
+                <div className="about-consultation-actions">
+                    <button type="button" className="about-consultation-btn about-consultation-btn--primary" onClick={openCalendly}>
+                        Book a consultation
+                    </button>
+                </div>
+            </div>
         </div>
       </section>
       <SectionFooter />

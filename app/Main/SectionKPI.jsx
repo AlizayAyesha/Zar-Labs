@@ -88,7 +88,7 @@ export const SectionKPI = () => {
                                 </div>
                                 <h3 className="small-subheadline kpi-item-textbox-top-text white" >million</h3>
                             </div>
-                            <p className="description grey" >users continuosly running our <br /> photo enhancment software plugin.</p>
+                            <p className="description grey" >users continuously running our <br /> customized GPT tool.</p>
                         </div>
                         <div className="kpi-item-button" >
                             <Cone className="kpi-item-button-icon" />
