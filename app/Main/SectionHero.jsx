@@ -3,48 +3,50 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import SplitText from "gsap/src/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import Marquee from "react-fast-marquee";
 import { ArrowUpRight } from "lucide-react";
+import Marquee from "react-fast-marquee";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Float, OrbitControls } from "@react-three/drei";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Item3 } from "./HeroModel/Coins";
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
+const HERO_SERVICE_TAGS = [
+  "AI",
+  "SaaS",
+  "Cloud",
+  "Integration",
+  "Automation",
+  "DevOps",
+  "Analytics",
+];
+
 export const SectionHero = () => {
+  const router = useRouter();
 
-  // REFS 
-  const titleRef = useRef()
-  const descriptionRef = useRef()
-  const buttonRef1 = useRef()
-  const buttonCircleRef1 = useRef()
-  const buttonRef2 = useRef()
-  const logosWrapperRef = useRef()
-  const cursor = useRef()
-  const [showCursor, setShowCursor] = useState(false)
+  const titleRef = useRef();
+  const descriptionRef = useRef();
+  const buttonRef = useRef();
+  const tagsRef = useRef();
+  const cursor = useRef();
+  const [showCursor, setShowCursor] = useState(false);
 
-  // GSAP ANIMATIONS
   useEffect(() => {
-
-    gsap.set(titleRef.current, { opacity: 1 })
+    gsap.set(titleRef.current, { opacity: 1 });
 
     const titleSplit = new SplitText(titleRef.current, { type: "chars" });
-    gsap.fromTo(titleSplit.chars, { 'will-change': 'opacity, transform', filter: 'blur(8px)', opacity: 0, yPercent: 50 }, { delay: 0.4, opacity: 1, filter: 'blur(0px)', yPercent: 0, stagger: 0.02, duration: 0.75, ease: "power1" });
+    gsap.fromTo(
+      titleSplit.chars,
+      { "will-change": "opacity, transform", filter: "blur(8px)", opacity: 0, yPercent: 50 },
+      { delay: 0.4, opacity: 1, filter: "blur(0px)", yPercent: 0, stagger: 0.02, duration: 0.75, ease: "power1" }
+    );
 
-    // description text animation
-    gsap.to(descriptionRef.current, { opacity: 1, filter: 'blur(0px)', duration: 1, delay: 0.9 })
+    gsap.to(descriptionRef.current, { opacity: 1, filter: "blur(0px)", duration: 1, delay: 0.9 });
+    gsap.to(buttonRef.current, { delay: 1.1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power1" });
+    gsap.to(tagsRef.current, { opacity: 1, filter: "blur(0px)", duration: 1, delay: 0.9 });
+  }, []);
 
-    // buttons animation
-    gsap.to(buttonRef1.current, { delay: 1.1, opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: "power1" })
-    gsap.to(buttonRef2.current, { delay: 1.4, opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: "power1" })
-
-    // logos wrapper animation
-    gsap.to(logosWrapperRef.current, { opacity: 1, filter: 'blur(0px)', duration: 1, delay: 0.9 })
-
-  }, [])
-
-  // FOLLOWING CURSOR
   useEffect(() => {
     let mouseX = 0;
     let mouseY = 0;
@@ -74,10 +76,10 @@ export const SectionHero = () => {
 
     animate();
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -87,25 +89,20 @@ export const SectionHero = () => {
         autoAlpha: 1,
         scale: 1,
         duration: 0.3,
-        ease: 'power3.out',
+        ease: "power3.out",
       });
     } else {
       gsap.to(cursor.current, {
         autoAlpha: 0,
         scale: 0,
         duration: 0.3,
-        ease: 'power3.in',
+        ease: "power3.in",
       });
     }
   }, [showCursor]);
 
-  const handleMouseEnter = () => {
-    setShowCursor(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowCursor(false);
-  };
+  const handleMouseEnter = () => setShowCursor(true);
+  const handleMouseLeave = () => setShowCursor(false);
 
   return (
     <section className="hero tech-pattern-bg">
@@ -117,21 +114,21 @@ export const SectionHero = () => {
             <div className="hero-textbox">
               <div className="hero-titlebox">
                 <div className="hero-titlebox-gradient" />
-                <h1 className="headline hero-headline white" ref={titleRef} >Crafting Digital <br /> Masterpieces</h1>
+                <h1 className="headline hero-headline white" ref={titleRef}>
+                  Crafting Digital <br /> Masterpieces
+                </h1>
               </div>
-              <p className="big-description grey opacity-blur" ref={descriptionRef} >Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality</p>
+              <p className="big-description grey opacity-blur" ref={descriptionRef}>
+                Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality
+              </p>
             </div>
             <div className="hero-buttons-row">
-              <button className="button button-transparent-border opacity-blur" ref={buttonRef1} >
-                <div className="button-content">
-                  <span className="small-description">See More</span>
-                  <span className="small-description">See More</span>
-                </div>
-                <div className="button-circle" ref={buttonCircleRef1} >
-                  <ArrowUpRight className="button-icon button-icon-180" />
-                </div>
-              </button>
-              <button className="button button-transparent-border opacity-blur" ref={buttonRef2} >
+              <button
+                type="button"
+                className="button button-transparent-border opacity-blur"
+                ref={buttonRef}
+                onClick={() => router.push("/contact")}
+              >
                 <div className="button-content">
                   <span className="small-description">Get In Touch</span>
                   <span className="small-description">Get In Touch</span>
@@ -140,11 +137,14 @@ export const SectionHero = () => {
                   <ArrowUpRight className="button-icon" />
                 </div>
               </button>
-              </div>
+            </div>
           </div>
-          <div className="hero-content-right" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
-            <Canvas style={{ pointerEvents: 'auto', width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: 1 }} camera={{ position: [ 2, 0, 10], fov: 35 }}>
-              <Suspense fallback >
+          <div className="hero-content-right" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            <Canvas
+              style={{ pointerEvents: "auto", width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: 1 }}
+              camera={{ position: [2, 0, 10], fov: 35 }}
+            >
+              <Suspense fallback>
                 <Float rotationIntensity={0.5} floatIntensity={2} speed={2}>
                   <Item3 />
                 </Float>
@@ -154,37 +154,27 @@ export const SectionHero = () => {
             </Canvas>
           </div>
         </div>
-        <div className="hero-content-bottom opacity-blur" ref={logosWrapperRef} >
-          <Marquee className="hero-content-bottom-row" gradient={true} gradientColor="#010101" gradientWidth={250}>
-            {[
-              "/logos/adobe.webp", 
-              "/logos/webflow.svg", 
-              "/logos/stripe.svg", 
-              "/logos/adobe.webp", 
-              "/logos/webflow.svg", 
-              "/logos/stripe.svg", 
-              "/logos/adobe.webp", 
-              "/logos/webflow.svg", 
-              "/logos/stripe.svg", 
-              "/logos/adobe.webp", 
-              "/logos/webflow.svg", 
-              "/logos/stripe.svg", 
-              "/logos/adobe.webp", 
-              "/logos/webflow.svg", 
-              "/logos/stripe.svg", 
-              "/logos/adobe.webp", 
-              "/logos/webflow.svg", 
-              "/logos/stripe.svg", 
-            ].map((src, i) => (
-              <div className="hero-content-bottom-item" key={i}>
-                <Image width={100} height={100} src={src} alt={`Marquee item ${i + 1}`} className="hero-content-bottom-image" />
+        <div className="hero-content-bottom hero-service-marquee opacity-blur" ref={tagsRef}>
+          <Marquee
+            className="hero-service-marquee-row"
+            gradient={true}
+            gradientColor="#010101"
+            gradientWidth={120}
+            speed={35}
+          >
+            {[...HERO_SERVICE_TAGS, ...HERO_SERVICE_TAGS].map((tag, i) => (
+              <div className="hero-service-marquee-item" key={`${tag}-${i}`}>
+                <span className="hero-service-tag small-subheadline white">{tag}</span>
+                <span className="hero-service-tag-sep" aria-hidden="true">
+                  ·
+                </span>
               </div>
             ))}
           </Marquee>
         </div>
       </div>
       <div className="hover-cursor" ref={cursor}>
-        <p className="small-description white" >Drag</p>
+        <p className="small-description white">Drag</p>
       </div>
     </section>
   );
