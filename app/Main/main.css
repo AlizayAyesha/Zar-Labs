@@ -193,6 +193,22 @@
 
 }
 
+.hero-gradient-bottom-right {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 55%;
+    height: 50%;
+    background: radial-gradient(
+        ellipse 115% 95% at 100% 100%,
+        rgba(1, 1, 1, 0.92) 0%,
+        rgba(1, 1, 1, 0.55) 42%,
+        transparent 72%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
 .hero-content {
     width: 100%;
     height: 100%;
@@ -309,19 +325,24 @@
 }
 
 .hero-service-tag {
-    padding: 0.6vh 1.4vw;
-    border-radius: 99px;
-    box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.2);
-    background-color: rgba(34, 197, 94, 0.04);
-    letter-spacing: 0.04em;
+    padding: 0.4vh 0.6vw;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    font-size: 0.65rem;
+    font-size: calc(2vw * 1.02);
+    font-family: "SF PRO DISPLAY 700", sans-serif;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1;
     white-space: nowrap;
 }
 
 .hero-service-tag-sep {
-    color: rgba(34, 197, 94, 0.55);
-    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: calc(2vw * 1.02);
+    font-weight: 800;
     line-height: 1;
     user-select: none;
 }
@@ -1362,8 +1383,17 @@
 }
 
 .hero-service-tag {
-    padding: 1.5vw 3.5vw;
-    font-size: 2.5vw;
+    padding: 0.5vw 0.75vw;
+    font-size: calc(5vw * 1.02);
+}
+
+.hero-service-tag-sep {
+    font-size: calc(5vw * 1.02);
+}
+
+.hero-gradient-bottom-right {
+    width: 85%;
+    height: 55%;
 }
  
 /* SERVICES */

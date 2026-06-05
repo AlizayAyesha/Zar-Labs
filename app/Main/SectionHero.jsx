@@ -108,6 +108,7 @@ export const SectionHero = () => {
     <section className="hero tech-pattern-bg">
       <div className="hero-background-element-small" />
       <div className="hero-background-element-grid-small" />
+      <div className="hero-gradient-bottom-right" aria-hidden="true" />
       <div className="hero-content">
         <div className="hero-content-row">
           <div className="hero-content-left">
@@ -164,7 +165,7 @@ export const SectionHero = () => {
           >
             {[...HERO_SERVICE_TAGS, ...HERO_SERVICE_TAGS].map((tag, i) => (
               <div className="hero-service-marquee-item" key={`${tag}-${i}`}>
-                <span className="hero-service-tag small-subheadline white">{tag}</span>
+                <span className="hero-service-tag">{tag}</span>
                 <span className="hero-service-tag-sep" aria-hidden="true">
                   ·
                 </span>
