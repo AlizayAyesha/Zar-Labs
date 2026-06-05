@@ -14,7 +14,7 @@ import "./main.css";
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useProgress } from "@react-three/drei";
 
-const Main = () => {
+const Main = ({ videos = {} }) => {
 
   const { progress } = useProgress();
   const [fadeOut, setFadeOut] = useState(false);
@@ -48,12 +48,12 @@ const Main = () => {
       <div className="border-padding">
         <div className="section-border"></div>
       </div>
-      <SectionServices />
+      <SectionServices videoSrc={videos["home.services"]} />
       <div className="normal-padding" />
       <SectionProjects />
       <SectionProjectsMobile />
       <div className="normal-padding" />
-      <SectionTechstack />
+      <SectionTechstack videoSrc={videos["home.techstack.logos"]} />
       <div className="normal-padding" />
       <SectionTestimonials />
       <SectionKPI />

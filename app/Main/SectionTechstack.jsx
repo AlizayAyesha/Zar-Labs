@@ -15,7 +15,7 @@ const TWEEN_FACTOR_BASE = 0.25
 
 const numberWithinRange = (number, min, max) => Math.min(Math.max(number, min), max)
 
-export const SectionTechstack = () => {
+export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
 
     // GSAP ANIMATIONS
 
@@ -195,7 +195,7 @@ export const SectionTechstack = () => {
                                 </button>
                             </div>
                         </div>
-                        <video className="techstack-item-content-video" ref={videoRef} src="/videos/logos.mp4" alt="Duotone" muted playsInline={true} data-wf-ignore="true" loop  />
+                        <video className="techstack-item-content-video" ref={videoRef} src={videoSrc} alt="Duotone" muted playsInline={true} data-wf-ignore="true" loop  />
                     </div>
                     <div className="background-gradient-circle" />
                     <div className="techstack-item-no-padding-border" />

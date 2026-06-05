@@ -10,7 +10,7 @@ import { useCalendly } from "./CalendlyProvider";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, CustomEase);
 
-export const SectionServices = () => {
+export const SectionServices = ({ videoSrc = "/videos/serviceshighquality.mp4" }) => {
   const { openCalendly } = useCalendly();
   const router = useRouter();
   const subheadlineBoxRef = useRef();
@@ -134,7 +134,7 @@ export const SectionServices = () => {
             aria-label="Go to project intake form"
           >
             <video
-              src="/videos/serviceshighquality.mp4"
+              src={videoSrc}
               className="services-content-video"
               autoPlay="autoplay"
               muted
