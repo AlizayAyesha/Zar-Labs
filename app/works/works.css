@@ -685,6 +685,20 @@
         flex: 0 0 5vw;
     }
 
+    .works-carousel-wrapper,
+    .works-carousel,
+    .casestudies-carousel-wrapper,
+    .casestudies-carousel {
+        touch-action: pan-y pinch-zoom;
+    }
+
+    .works-carousel .works-item-content-image,
+    .casestudies-carousel .casestudies-item-content-image {
+        pointer-events: none;
+        -webkit-user-drag: none;
+        user-select: none;
+    }
+
     .works-content-projects {
         padding: 0;
         flex-direction: column;

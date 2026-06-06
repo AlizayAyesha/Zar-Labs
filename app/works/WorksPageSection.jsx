@@ -33,6 +33,15 @@ const WORKS_INDUSTRY_IMAGES = [
 
 gsap.registerPlugin(ScrollTrigger);
 
+const WORKS_LENIS_OPTIONS = {
+  prevent: (node) =>
+    Boolean(
+      node.closest?.(".works-carousel-wrapper, .works-carousel, .casestudies-carousel")
+    ),
+};
+
+const WORKS_EMBLA_OPTIONS = { dragFree: true, align: "start" };
+
 export const WorksPageSection = () => {
   const { openCalendly } = useCalendly();
   const router = useRouter();
@@ -159,8 +168,8 @@ export const WorksPageSection = () => {
   };
 
   // EMBLA CAROUSEL
-  const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true });
-  const [emblaRef2, emblaApi2] = useEmblaCarousel({ dragFree: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel(WORKS_EMBLA_OPTIONS);
+  const [emblaRef2, emblaApi2] = useEmblaCarousel(WORKS_EMBLA_OPTIONS);
   
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrollProgress2, setScrollProgress2] = useState(0);
@@ -204,8 +213,21 @@ export const WorksPageSection = () => {
     return () => emblaApi2.off("reInit", handleScroll).off("scroll", handleScroll).off("slideFocus", handleScroll);
   }, [emblaApi2, onScroll]);
 
+  useEffect(() => {
+    if (!emblaApi && !emblaApi2) return;
+
+    const reInitCarousels = () => {
+      emblaApi?.reInit();
+      emblaApi2?.reInit();
+    };
+
+    reInitCarousels();
+    window.addEventListener("resize", reInitCarousels);
+    return () => window.removeEventListener("resize", reInitCarousels);
+  }, [emblaApi, emblaApi2]);
+
   return (
-    <ReactLenis root>
+    <ReactLenis root options={WORKS_LENIS_OPTIONS}>
       <LenisScrollTriggerSync />
       <section className="works" >
         <div className="works-content" >
@@ -220,8 +242,13 @@ export const WorksPageSection = () => {
               </div>
               <div className="works-content-top-divider" ref={lineRef} />
             </div>
-            <div className="works-carousel-wrapper" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
-              <div className="works-carousel" ref={emblaRef2} >
+            <div
+              className="works-carousel-wrapper"
+              data-lenis-prevent-touch
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className="works-carousel" ref={emblaRef2} data-lenis-prevent-touch>
                 <div className="works-carousel-wrapper-overlay" ref={worksItemRef1} />
                 <div className="works-carousel-row">
                   <div className="works-item-padding" />
@@ -431,8 +458,8 @@ export const WorksPageSection = () => {
               </div>
               <p className="description grey" ref={subdescriptionRef2} >Real projects across AI, SaaS, integrations, cloud, analytics, and growth — see how we deliver measurable results.</p>
             </div>
-            <div className="casestudies-carousel-wrapper opacity-blur" ref={carouselWrapperRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
-              <div className="casestudies-carousel" ref={emblaRef} >
+            <div className="casestudies-carousel-wrapper opacity-blur" ref={carouselWrapperRef} data-lenis-prevent-touch onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
+              <div className="casestudies-carousel" ref={emblaRef} data-lenis-prevent-touch>
                 <div className="casestudies-carousel-row">
                   <div className="casestudies-item-padding" />
                   {CASE_STUDIES.map((study) => (
