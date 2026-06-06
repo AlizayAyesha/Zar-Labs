@@ -9,6 +9,7 @@ import { SectionServices } from "./SectionServices";
 import { SectionProjects } from "./SectionProjects";
 import { SectionProjectsMobile } from "./SectionProjectsMobile";
 import { SectionKPI } from "./SectionKPI";
+import { SectionDiscover } from "./SectionDiscover";
 import { ZarLabsLoader } from "./ZarLabsLoader";
 import { LenisScrollTriggerSync } from "./LenisScrollTriggerSync";
 import "./main.css";
@@ -33,6 +34,8 @@ function HomePageContent({ videos, fadeOut }) {
       <div className="normal-padding" />
       <SectionProjects />
       <SectionProjectsMobile />
+      <div className="normal-padding" />
+      <SectionDiscover />
       <div className="normal-padding" />
       <SectionTechstack videoSrc={videos["home.techstack.logos"]} />
       <div className="normal-padding" />

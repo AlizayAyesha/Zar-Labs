@@ -68,12 +68,39 @@
     position: relative;
 }
 
+.works-carousel-viewport {
+    position: relative;
+    width: 100%;
+}
+
 .works-carousel {
     width: 100%;
     display: flex;
     height: fit-content;
     position: relative;
     overflow: hidden;
+    cursor: grab;
+}
+
+.works-carousel:active,
+.works-carousel.is-dragging {
+    cursor: grabbing;
+}
+
+.works-carousel .works-item-content-image,
+.casestudies-carousel .casestudies-item-content-image {
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+.casestudies-carousel {
+    cursor: grab;
+}
+
+.casestudies-carousel:active,
+.casestudies-carousel.is-dragging {
+    cursor: grabbing;
 }
 
 .works-carousel-wrapper-overlay {
@@ -93,6 +120,16 @@
     display: flex;
     gap: 1vw;
     width: 100%;
+    user-select: none;
+}
+
+.works-carousel .works-item-content-textbox {
+    pointer-events: none;
+}
+
+.works-carousel .works-item-last-content,
+.works-carousel .works-item-last-content * {
+    pointer-events: auto;
 }
 
 .works-item-padding {
@@ -311,12 +348,14 @@
     height: 100%;
     overflow: hidden;
     border-radius: 10px;
+    transform-origin: left center;
 }
 
 .works-industries-item-right-image {
-    width: 40vw;
+    width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .works-casestudies {
@@ -450,6 +489,24 @@
 .casestudies-carousel-bottom-buttons {
     display: flex;
     gap: 0.5vw;
+    position: relative;
+    z-index: 12;
+}
+
+.works-content .casestudies-carousel-bottom-buttons .carousel-button {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 44px;
+    min-height: 44px;
+    pointer-events: auto;
+    flex-shrink: 0;
+}
+
+.works-content .casestudies-carousel-bottom-buttons .carousel-button-icon {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
 }
 
 /* CASESTUDY PAGE */

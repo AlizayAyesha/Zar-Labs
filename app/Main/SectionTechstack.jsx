@@ -24,6 +24,13 @@ const TECHSTACK_SLIDER_IMAGES = [
   "/logos/houdini.png",
 ];
 
+const TECHSTACK_CARD_IMAGES = [
+  "/logos/slack.png",
+  "/logos/gmail.png",
+  "/logos/notion.png",
+  "/logos/miro.svg",
+];
+
 export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
   const bentoBoxRef1 = useRef();
   const bentoBoxRef2 = useRef();
@@ -31,49 +38,97 @@ export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    preloadImages(TECHSTACK_SLIDER_IMAGES);
+    preloadImages([...TECHSTACK_SLIDER_IMAGES, ...TECHSTACK_CARD_IMAGES]);
 
-    gsap.fromTo(
-      bentoBoxRef1.current,
-      { rotationY: 30, scale: 0.6, opacity: 0 },
-      { rotationY: 0, scale: 1, opacity: 1, duration: 0.75, ease: "power1", scrollTrigger: { trigger: bentoBoxRef1.current, start: "top bottom" } }
-    );
-    gsap.fromTo(
-      bentoBoxRef2.current,
-      { rotationY: 30, scale: 0.6, opacity: 0 },
-      { rotationY: 0, scale: 1, opacity: 1, duration: 0.75, ease: "power1", scrollTrigger: { trigger: bentoBoxRef2.current, start: "top bottom" } }
-    );
+    const video = videoRef.current;
+    if (video) {
+      video.preload = "auto";
+      video.load();
+    }
 
-    const addClassnames = () => {
+    gsap.set([bentoBoxRef1.current, bentoBoxRef2.current, bentoBoxRef3.current], {
+      rotationY: 30,
+      scale: 0.6,
+      opacity: 0,
+    });
+
+    const animateCards = () => {
       const cards = document.querySelectorAll(".techstack-item-card");
       cards.forEach((card, index) => {
         card.classList.add(`techstack-item-card-animated-${index + 1}`);
       });
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         cards.forEach((card) => {
           card.classList.add("techstack-item-card-animated-hover");
         });
-      }, 1250);
+      });
     };
 
-    gsap.fromTo(
-      bentoBoxRef3.current,
-      { rotationY: 30, scale: 0.6, opacity: 0 },
-      {
-        delay: 0.2,
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".techstack-container",
+        start: "top 88%",
+        once: true,
+      },
+    });
+
+    timeline
+      .to(bentoBoxRef1.current, {
         rotationY: 0,
         scale: 1,
         opacity: 1,
-        duration: 0.75,
-        ease: "power1",
-        scrollTrigger: { trigger: bentoBoxRef3.current, start: "top bottom" },
-        onComplete: addClassnames,
-      }
-    );
+        duration: 0.4,
+        ease: "power2.out",
+      })
+      .to(
+        bentoBoxRef2.current,
+        {
+          rotationY: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "-=0.28"
+      )
+      .to(
+        bentoBoxRef3.current,
+        {
+          rotationY: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+          onStart: animateCards,
+        },
+        "-=0.28"
+      );
+
+    return () => {
+      timeline.scrollTrigger?.kill();
+      timeline.kill();
+    };
   }, []);
 
   const handleVideoButtonClick = () => {
-    videoRef.current?.play();
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.playbackRate = 1.35;
+
+    const play = () => {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    };
+
+    if (video.readyState >= 2) {
+      play();
+      return;
+    }
+
+    video.addEventListener("canplay", play, { once: true });
+    video.load();
   };
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, watchDrag: false });
@@ -203,6 +258,7 @@ export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
                 src={videoSrc}
                 muted
                 playsInline
+                preload="auto"
                 data-wf-ignore="true"
                 loop
               />
@@ -257,7 +313,7 @@ export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
                     initial={{ opacity: 0, filter: "blur(10px)" }}
                     animate={{ opacity: 1, filter: "blur(0px)" }}
                     exit={{ opacity: 0, filter: "blur(10px)" }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.28 }}
                   >
                     {slideDescriptions[selectedIndex]}
                   </motion.p>

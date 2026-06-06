@@ -4,11 +4,14 @@ import { Providers } from "./Providers";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zarlabs.com";
 
+const siteTitle = "Zar Labs | Cutting-Edge Website Design & Custom Digital Solutions";
+const siteDescription =
+  "Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality.";
+
 export const metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Zar Labs | Cutting-Edge Website Design & Custom Digital Solutions",
-  description:
-    "Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality.",
+  title: siteTitle,
+  description: siteDescription,
   keywords: [
     "website design",
     "UX/UI design",
@@ -35,35 +38,35 @@ export const metadata = {
   ],
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-48.webp", sizes: "48x48", type: "image/webp" },
       { url: "/favicon-96.webp", sizes: "96x96", type: "image/webp" },
-      { url: "/images/zarlabs-logo-192.webp", sizes: "192x192", type: "image/webp" },
     ],
-    apple: [{ url: "/images/zarlabs-logo-192.webp", sizes: "180x180", type: "image/webp" }],
-    shortcut: "/favicon-48.webp",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico",
   },
   openGraph: {
-    title: "Zar Labs | Cutting-Edge Website Design & Custom Digital Solutions",
-    description:
-      "Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality.",
+    title: siteTitle,
+    description: siteDescription,
     url: siteUrl,
     siteName: "Zar Labs",
+    locale: "en_US",
     images: [
       {
-        url: "/images/zarlabs-logo-192.webp",
-        width: 192,
-        height: 192,
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
         alt: "Zar Labs logo",
+        type: "image/jpeg",
       },
     ],
     type: "website",
   },
   twitter: {
-    card: "summary",
-    title: "Zar Labs | Cutting-Edge Website Design & Custom Digital Solutions",
-    description:
-      "Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality.",
-    images: ["/images/zarlabs-logo-192.webp"],
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: ["/og-image.jpg"],
   },
 };
 

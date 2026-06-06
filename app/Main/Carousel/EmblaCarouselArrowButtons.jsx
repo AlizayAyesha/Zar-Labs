@@ -1,30 +1,66 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-export const usePrevNextButtons = (emblaApi) => {
+export const usePrevNextButtons = (emblaApi, { dragFree = false } = {}) => {
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
 
+  const updateButtons = useCallback((api) => {
+    if (!api) return
+
+    if (dragFree) {
+      const progress = api.scrollProgress()
+      setPrevBtnDisabled(progress <= 0.005)
+      setNextBtnDisabled(progress >= 0.995)
+      return
+    }
+
+    setPrevBtnDisabled(!api.canScrollPrev())
+    setNextBtnDisabled(!api.canScrollNext())
+  }, [dragFree])
+
   const onPrevButtonClick = useCallback(() => {
     if (!emblaApi) return
+
+    if (dragFree) {
+      const index = emblaApi.selectedScrollSnap()
+      emblaApi.scrollTo(Math.max(0, index - 1))
+      return
+    }
+
     emblaApi.scrollPrev()
-  }, [emblaApi])
+  }, [emblaApi, dragFree])
 
   const onNextButtonClick = useCallback(() => {
     if (!emblaApi) return
-    emblaApi.scrollNext()
-  }, [emblaApi])
 
-  const onSelect = useCallback((emblaApi) => {
-    setPrevBtnDisabled(!emblaApi.canScrollPrev())
-    setNextBtnDisabled(!emblaApi.canScrollNext())
-  }, [])
+    if (dragFree) {
+      const index = emblaApi.selectedScrollSnap()
+      const lastIndex = emblaApi.scrollSnapList().length - 1
+      emblaApi.scrollTo(Math.min(lastIndex, index + 1))
+      return
+    }
+
+    emblaApi.scrollNext()
+  }, [emblaApi, dragFree])
 
   useEffect(() => {
     if (!emblaApi) return
 
-    onSelect(emblaApi)
-    emblaApi.on('reInit', onSelect).on('select', onSelect)
-  }, [emblaApi, onSelect])
+    updateButtons(emblaApi)
+    emblaApi
+      .on('reInit', updateButtons)
+      .on('select', updateButtons)
+      .on('scroll', updateButtons)
+      .on('settle', updateButtons)
+
+    return () => {
+      emblaApi
+        .off('reInit', updateButtons)
+        .off('select', updateButtons)
+        .off('scroll', updateButtons)
+        .off('settle', updateButtons)
+    }
+  }, [emblaApi, updateButtons])
 
   return {
     prevBtnDisabled,

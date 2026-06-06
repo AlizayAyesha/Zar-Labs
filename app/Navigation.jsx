@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 "use client";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
@@ -62,7 +62,8 @@ export const Navigation = () => {
     }, [mobileMenuOpen]);
 
   return (
-    <div className="navigation-wrapper">
+    <>
+        <div className={`navigation-wrapper${mobileMenuOpen ? ' navigation-wrapper--menu-open' : ''}`}>
         <div className="navigation-inside" ref={navigationBar} >
             <Link href="/" className="navigation-inside-left" onClick={() => setMobileMenuOpen(false)} aria-label="Zar Labs home">
                 <img src="/images/zarlabs-logo.webp" className="navigation-inside-left-image" alt="Zar Labs" />
@@ -95,18 +96,33 @@ export const Navigation = () => {
                 <span className="navigation-inside-right-mobile-line" />
             </button>
         </div>
+        </div>
+
         <nav
             className={`navigation-mobile-menu${mobileMenuOpen ? ' is-open' : ''}`}
             aria-hidden={!mobileMenuOpen}
         >
-            <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/')}>Home</button>
-            <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/about')}>About</button>
-            <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/works')}>Works</button>
-            <button type="button" className="navigation-mobile-menu-link navigation-mobile-menu-link--cta" onClick={() => handleNavigate('/contact')}>
-                Get In Touch
-                <ArrowUpRight className="navigation-mobile-menu-link-icon" />
-            </button>
+            <div className="navigation-mobile-menu-top">
+                <span className="navigation-mobile-menu-label small-description grey">Menu</span>
+                <button
+                    type="button"
+                    className="navigation-mobile-menu-close"
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-label="Close menu"
+                >
+                    <X className="navigation-mobile-menu-close-icon" />
+                </button>
+            </div>
+            <div className="navigation-mobile-menu-links">
+                <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/')}>Home</button>
+                <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/about')}>About</button>
+                <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/works')}>Works</button>
+                <button type="button" className="navigation-mobile-menu-link navigation-mobile-menu-link--cta" onClick={() => handleNavigate('/contact')}>
+                    Get In Touch
+                    <ArrowUpRight className="navigation-mobile-menu-link-icon" />
+                </button>
+            </div>
         </nav>
-    </div>
+    </>
   );
 };

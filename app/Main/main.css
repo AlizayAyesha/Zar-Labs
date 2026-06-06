@@ -1147,6 +1147,105 @@
     gap: 0.5vw;
 }
 
+/* DISCOVER SECTION */
+
+.discover {
+    height: fit-content;
+    display: flex;
+    position: relative;
+}
+
+.discover-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+}
+
+.discover-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1vw;
+}
+
+.discover-card {
+    width: 100%;
+    min-height: 28vw;
+    border: none;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 25px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(34, 197, 94, 0.025);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.075), inset 0 0 5vw rgba(34, 197, 94, 0.05);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.discover-card:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 calc(1px + 0px) rgba(34, 197, 94, 0.15), 0 12px 40px rgba(34, 197, 94, 0.08);
+}
+
+.discover-card-imagebox {
+    width: 100%;
+    height: 16vw;
+    min-height: 180px;
+    position: relative;
+    overflow: hidden;
+}
+
+.discover-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.discover-card:hover .discover-card-image {
+    transform: scale(1.05);
+}
+
+.discover-card-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(1, 1, 1, 0.85) 100%);
+}
+
+.discover-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25vh;
+    padding: 2vw;
+    flex: 1;
+}
+
+.discover-card-icon-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5vw;
+}
+
+.discover-card-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.discover-card-link {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35vw;
+}
+
+.discover-card-link-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
 /* KPI SECTION */
 
 .kpi {
@@ -1426,7 +1525,7 @@
     border-radius: 50%;
     background-color: #010101;
     filter: blur(35px);
-    opacity: 1;
+    opacity: 0.05;
     position: absolute;
     right: -5vw;
     bottom: -7.5vw;
@@ -1857,6 +1956,36 @@
 .flower-content-textbox-item .subheadline {
     font-size: clamp(1.15rem, 4.5vw, 2rem);
     line-height: 1.1;
+}
+
+.discover-grid {
+    grid-template-columns: 1fr;
+    gap: 4vw;
+}
+
+.discover-card {
+    min-height: auto;
+    border-radius: 15px;
+}
+
+.discover-card-imagebox {
+    height: 42vw;
+    min-height: 160px;
+}
+
+.discover-card-body {
+    padding: 5vw;
+    gap: 1.5vh;
+}
+
+.discover-card-icon {
+    width: 4vw;
+    height: 4vw;
+}
+
+.discover-card-link-icon {
+    width: 4vw;
+    height: 4vw;
 }
 
 }

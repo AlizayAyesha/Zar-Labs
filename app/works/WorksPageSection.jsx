@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ReactLenis } from 'lenis/react'
+import { ReactLenis, useLenis } from 'lenis/react'
 import "./works.css";
 import { LenisScrollTriggerSync } from "../Main/LenisScrollTriggerSync";
 import { PrevButton, NextButton, usePrevNextButtons} from "../Main/Carousel/EmblaCarouselArrowButtons"
@@ -34,15 +34,41 @@ const WORKS_INDUSTRY_IMAGES = [
 gsap.registerPlugin(ScrollTrigger);
 
 const WORKS_LENIS_OPTIONS = {
+  lerp: 0.09,
+  smoothWheel: true,
   prevent: (node) =>
     Boolean(
-      node.closest?.(".works-carousel-wrapper, .works-carousel, .casestudies-carousel")
+      node.closest?.(
+        ".works-carousel-wrapper, .works-carousel, .casestudies-carousel-wrapper, .casestudies-carousel"
+      )
     ),
+};
+
+const INDUSTRY_SCRUB = {
+  start: "top 88%",
+  end: "top 72%",
+  scrub: 0.35,
+};
+
+const WORKS_TOP_EMBLA_OPTIONS = {
+  dragFree: true,
+  align: "start",
+  container: ".works-carousel-row",
 };
 
 const WORKS_EMBLA_OPTIONS = { dragFree: true, align: "start" };
 
-export const WorksPageSection = () => {
+function WorksPageContent() {
+  const lenis = useLenis();
+
+  useEffect(() => {
+    lenis?.start();
+  }, [lenis]);
+
+  return <WorksPageBody />;
+}
+
+function WorksPageBody() {
   const { openCalendly } = useCalendly();
   const router = useRouter();
   const pathname = usePathname();
@@ -71,45 +97,93 @@ export const WorksPageSection = () => {
   const worksItemRef1 = useRef()
   const worksItemRef2 = useRef()
   const worksItemRef3 = useRef()
+  const subheadlineBoxRef1 = useRef()
+  const subheadlineBoxRef2 = useRef()
   const industryImageRef1 = useRef()
   const industryImageRef2 = useRef()
   const industryImageRef3 = useRef()
   const industryImageRef4 = useRef()
-  const subheadlineBoxRef1 = useRef()
-  const subheadlineBoxRef2 = useRef()
   const cursor = useRef()
   const [showCursor, setShowCursor] = useState(false)
 
   useEffect(() => {
     let cancelled = false;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+    // Industry images load first — they sit far down the page and were blocked behind carousel/case-study preloads
+    preloadImages(WORKS_INDUSTRY_IMAGES);
 
     const revealCarousel = () => {
       if (cancelled || !worksItemRef1.current) return;
-      gsap.to(worksItemRef1.current, { opacity: 0, duration: 0.75, ease: "power1" });
+      gsap.to(worksItemRef1.current, {
+        opacity: 0,
+        duration: isMobile ? 0.75 : 0.3,
+        ease: "power1",
+      });
     };
 
-    preloadImages([
-      ...WORKS_MOCKUP_IMAGES,
-      ...WORKS_INDUSTRY_IMAGES,
-      ...CASE_STUDIES.map((s) => s.carouselImage),
-    ]).finally(revealCarousel);
-
-    gsap.fromTo(industryImageRef1.current, { width: 0 }, { width: "100%", scrollTrigger: { trigger: industryImageRef1.current, start: "top bottom", end: "center center", scrub: true } });
-    gsap.fromTo(industryImageRef2.current, { width: 0 }, { width: "100%", scrollTrigger: { trigger: industryImageRef2.current, start: "top bottom", end: "center center", scrub: true } });
-    gsap.fromTo(industryImageRef3.current, { width: 0 }, { width: "100%", scrollTrigger: { trigger: industryImageRef3.current, start: "top bottom", end: "center center", scrub: true } });
-    gsap.fromTo(industryImageRef4.current, { width: 0 }, { width: "100%", scrollTrigger: { trigger: industryImageRef4.current, start: "top bottom", end: "center center", scrub: true } });
+    if (isMobile) {
+      preloadImages([
+        ...WORKS_MOCKUP_IMAGES,
+        ...CASE_STUDIES.map((s) => s.carouselImage),
+      ]).finally(revealCarousel);
+    } else {
+      revealCarousel();
+      preloadImages([
+        ...WORKS_MOCKUP_IMAGES,
+        ...CASE_STUDIES.map((s) => s.carouselImage),
+      ]);
+    }
 
     return () => {
       cancelled = true;
     };
   }, [])
 
-  // FOLLOWING CURSOR
   useEffect(() => {
+    const imageBoxes = [
+      industryImageRef1.current,
+      industryImageRef2.current,
+      industryImageRef3.current,
+      industryImageRef4.current,
+    ].filter(Boolean)
+
+    if (!imageBoxes.length) return
+
+    gsap.set(imageBoxes, { scaleX: 0, transformOrigin: "left center" })
+
+    const triggers = imageBoxes.map((box) =>
+      gsap.fromTo(
+        box,
+        { scaleX: 0, transformOrigin: "left center" },
+        {
+          scaleX: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: box,
+            ...INDUSTRY_SCRUB,
+          },
+        }
+      )
+    )
+
+    return () => {
+      triggers.forEach((tween) => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+      })
+    }
+  }, [])
+
+  // FOLLOWING CURSOR — only run rAF loop while cursor is visible (avoids scroll jank)
+  useEffect(() => {
+    if (!showCursor) return;
+
     let mouseX = 0;
     let mouseY = 0;
     let cursorX = 0;
     let cursorY = 0;
+    let frameId = 0;
     const speed = 0.05;
 
     const handleMouseMove = (event) => {
@@ -129,17 +203,17 @@ export const WorksPageSection = () => {
         cursor.current.style.top = `${cursorY}px`;
       }
 
-      requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
     };
 
-    animate();
-
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    frameId = requestAnimationFrame(animate);
 
     return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(frameId);
     };
-  }, []);
+  }, [showCursor]);
 
   useEffect(() => {
     if (showCursor) {
@@ -169,7 +243,7 @@ export const WorksPageSection = () => {
 
   // EMBLA CAROUSEL
   const [emblaRef, emblaApi] = useEmblaCarousel(WORKS_EMBLA_OPTIONS);
-  const [emblaRef2, emblaApi2] = useEmblaCarousel(WORKS_EMBLA_OPTIONS);
+  const [emblaRef2, emblaApi2] = useEmblaCarousel(WORKS_TOP_EMBLA_OPTIONS);
   
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrollProgress2, setScrollProgress2] = useState(0);
@@ -179,14 +253,14 @@ export const WorksPageSection = () => {
     nextBtnDisabled: nextBtnDisabled1,
     onPrevButtonClick: onPrevButtonClick1,
     onNextButtonClick: onNextButtonClick1,
-  } = usePrevNextButtons(emblaApi);
+  } = usePrevNextButtons(emblaApi, { dragFree: true });
   
   const {
     prevBtnDisabled: prevBtnDisabled2,
     nextBtnDisabled: nextBtnDisabled2,
     onPrevButtonClick: onPrevButtonClick2,
     onNextButtonClick: onNextButtonClick2,
-  } = usePrevNextButtons(emblaApi2);
+  } = usePrevNextButtons(emblaApi2, { dragFree: true });
   
   const onScroll = useCallback((emblaApi, setProgress) => {
     const progress = Math.max(0, Math.min(1, emblaApi.scrollProgress()));
@@ -221,13 +295,36 @@ export const WorksPageSection = () => {
       emblaApi2?.reInit();
     };
 
+    const attachDragClass = (api) => {
+      if (!api) return () => {};
+      const root = api.rootNode();
+      const onDown = () => root.classList.add("is-dragging");
+      const onUp = () => root.classList.remove("is-dragging");
+      root.addEventListener("pointerdown", onDown);
+      root.addEventListener("pointerup", onUp);
+      root.addEventListener("pointercancel", onUp);
+      return () => {
+        root.removeEventListener("pointerdown", onDown);
+        root.removeEventListener("pointerup", onUp);
+        root.removeEventListener("pointercancel", onUp);
+        root.classList.remove("is-dragging");
+      };
+    };
+
     reInitCarousels();
+    const cleanupDrag1 = attachDragClass(emblaApi);
+    const cleanupDrag2 = attachDragClass(emblaApi2);
     window.addEventListener("resize", reInitCarousels);
-    return () => window.removeEventListener("resize", reInitCarousels);
+
+    return () => {
+      window.removeEventListener("resize", reInitCarousels);
+      cleanupDrag1();
+      cleanupDrag2();
+    };
   }, [emblaApi, emblaApi2]);
 
   return (
-    <ReactLenis root options={WORKS_LENIS_OPTIONS}>
+    <>
       <LenisScrollTriggerSync />
       <section className="works" >
         <div className="works-content" >
@@ -248,9 +345,10 @@ export const WorksPageSection = () => {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <div className="works-carousel" ref={emblaRef2} data-lenis-prevent-touch>
+              <div className="works-carousel-viewport">
                 <div className="works-carousel-wrapper-overlay" ref={worksItemRef1} />
-                <div className="works-carousel-row">
+                <div className="works-carousel" ref={emblaRef2} data-lenis-prevent-touch data-lenis-prevent>
+                  <div className="works-carousel-row">
                   <div className="works-item-padding" />
                   <div className="works-item" >
                     <div className="works-item-content" >
@@ -375,6 +473,7 @@ export const WorksPageSection = () => {
                   <div className="works-item-padding" />
                 </div>
               </div>
+              </div>
               <div className="casestudies-carousel-bottom">
                 <div className="casestudies-carousel-bottom-buttons">
                   <PrevButton onClick={onPrevButtonClick2} disabled={prevBtnDisabled2} />
@@ -405,8 +504,8 @@ export const WorksPageSection = () => {
                   <h2 className="small-subheadline white" >Supply Chain & Logistics</h2>
                 </div>
                 <div className="works-industries-item-right">
-                  <div className="works-industries-item-right-imagebox" ref={industryImageRef1} >
-                    <PreloadedImage src="/images/test14.webp" className="works-industries-item-right-image" alt="Supply chain and logistics" />
+                  <div className="works-industries-item-right-imagebox" ref={industryImageRef1}>
+                    <img src="/images/test14.webp" className="works-industries-item-right-image" alt="Supply chain and logistics" loading="eager" decoding="async" fetchPriority="high" />
                   </div>
                 </div>
               </div>
@@ -416,8 +515,8 @@ export const WorksPageSection = () => {
                   <h2 className="small-subheadline white" >Luxury Travel & Hospitality</h2>
                 </div>
                 <div className="works-industries-item-right">
-                  <div className="works-industries-item-right-imagebox" ref={industryImageRef2} >
-                    <PreloadedImage src="/images/test17.webp" className="works-industries-item-right-image" alt="Luxury travel and hospitality" />
+                  <div className="works-industries-item-right-imagebox" ref={industryImageRef2}>
+                    <img src="/images/test17.webp" className="works-industries-item-right-image" alt="Luxury travel and hospitality" loading="eager" decoding="async" fetchPriority="high" />
                   </div>
                 </div>
               </div>
@@ -427,8 +526,8 @@ export const WorksPageSection = () => {
                   <h2 className="small-subheadline white" >Real Estate & Development</h2>
                 </div>
                 <div className="works-industries-item-right">
-                  <div className="works-industries-item-right-imagebox" ref={industryImageRef3} >
-                    <PreloadedImage src="/images/test18.webp" className="works-industries-item-right-image" alt="Real estate and development" />
+                  <div className="works-industries-item-right-imagebox" ref={industryImageRef3}>
+                    <img src="/images/test18.webp" className="works-industries-item-right-image" alt="Real estate and development" loading="eager" decoding="async" fetchPriority="high" />
                   </div>
                 </div>
               </div>
@@ -438,8 +537,8 @@ export const WorksPageSection = () => {
                   <h2 className="small-subheadline white" >Technology & AI</h2>
                 </div>
                 <div className="works-industries-item-right">
-                  <div className="works-industries-item-right-imagebox" ref={industryImageRef4} >
-                    <PreloadedImage src="/images/test19.webp" className="works-industries-item-right-image" alt="Technology and AI" />
+                  <div className="works-industries-item-right-imagebox" ref={industryImageRef4}>
+                    <img src="/images/test19.webp" className="works-industries-item-right-image" alt="Technology and AI" loading="eager" decoding="async" fetchPriority="high" />
                   </div>
                 </div>
               </div>
@@ -525,6 +624,12 @@ export const WorksPageSection = () => {
 
       </section>
       <SectionFooter />
-    </ReactLenis>
+    </>
   );
 };
+
+export const WorksPageSection = () => (
+  <ReactLenis root options={WORKS_LENIS_OPTIONS}>
+    <WorksPageContent />
+  </ReactLenis>
+);
