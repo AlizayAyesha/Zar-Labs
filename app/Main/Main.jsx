@@ -1,5 +1,5 @@
 "use client";
-import { ReactLenis, useLenis } from 'lenis/react'
+import { ReactLenis, useLenis } from "lenis/react";
 import { SectionHero } from "./SectionHero";
 import { SectionFooter } from "./SectionFooter";
 import { SectionTestimonials } from "./SectionTestimonials";
@@ -10,22 +10,20 @@ import { SectionProjects } from "./SectionProjects";
 import { SectionProjectsMobile } from "./SectionProjectsMobile";
 import { SectionKPI } from "./SectionKPI";
 import { ZarLabsLoader } from "./ZarLabsLoader";
+import { LenisScrollTriggerSync } from "./LenisScrollTriggerSync";
 import "./main.css";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-const Main = ({ videos = {} }) => {
-
-  const [fadeOut, setFadeOut] = useState(false);
+function HomePageContent({ videos, fadeOut }) {
   const lenis = useLenis();
 
   useEffect(() => {
     lenis?.start();
-    const timer = setTimeout(() => setFadeOut(true), 500);
-    return () => clearTimeout(timer);
   }, [lenis]);
 
   return (
-    <ReactLenis root>
+    <>
+      <LenisScrollTriggerSync />
       <ZarLabsLoader fadeOut={fadeOut} />
       <SectionHero />
       <div className="border-padding">
@@ -44,6 +42,21 @@ const Main = ({ videos = {} }) => {
       <SectionFlower />
       <div className="normal-padding normal-padding--footer-fade" />
       <SectionFooter />
+    </>
+  );
+}
+
+const Main = ({ videos = {} }) => {
+  const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setFadeOut(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <ReactLenis root>
+      <HomePageContent videos={videos} fadeOut={fadeOut} />
     </ReactLenis>
   );
 };

@@ -285,7 +285,7 @@
 
 .hero-headline {
     z-index: 0;
-    opacity: 0;
+    opacity: 1;
 }
 
 .hero-buttons-row {
@@ -311,8 +311,8 @@
 }
 
 .hero-service-marquee {
-    opacity: 0;
-    filter: blur(8px);
+    opacity: 1;
+    filter: none;
     width: 100%;
     position: relative;
 }
@@ -567,6 +567,30 @@
     bottom: 5vh;
     z-index: 5;
 }
+
+.projects-carousel-controls {
+    position: absolute;
+    bottom: 5vh;
+    left: 0;
+    right: 0;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2vw;
+    pointer-events: none;
+}
+
+.projects-carousel-controls-buttons {
+    display: flex;
+    gap: 0.5vw;
+    pointer-events: auto;
+}
+
+.projects-carousel-controls .embla__dots {
+    position: static;
+    pointer-events: auto;
+}
 .embla__dot {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0.25);
     -webkit-appearance: none;
@@ -740,16 +764,16 @@
 }
 
 .techstack-item-card-1 {
-    opacity: 0;
+    opacity: 1;
 }
 .techstack-item-card-2 {
     margin-bottom: 4.75vh;
 }
 .techstack-item-card-3 {
-    opacity: 0;
+    opacity: 1;
 }
 .techstack-item-card-4 {
-    opacity: 0;
+    opacity: 1;
 }
 
 .techstack-item-card-content {
@@ -1278,6 +1302,8 @@
 .flower-content-sequence {
     width: 100%;
     height: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .image-sequence-canvas {

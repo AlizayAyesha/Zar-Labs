@@ -1,16 +1,12 @@
 /* eslint-disable react/jsx-key */
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import SplitText from "gsap/src/SplitText";
-import ScrollTrigger from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
 import Marquee from "react-fast-marquee";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Float, OrbitControls } from "@react-three/drei";
 import { useRouter } from "next/navigation";
 import { Item3 } from "./HeroModel/Coins";
-
-gsap.registerPlugin(SplitText, ScrollTrigger);
 
 const HERO_SERVICE_TAGS = [
   "AI",
@@ -24,28 +20,8 @@ const HERO_SERVICE_TAGS = [
 
 export const SectionHero = () => {
   const router = useRouter();
-
-  const titleRef = useRef();
-  const descriptionRef = useRef();
-  const buttonRef = useRef();
-  const tagsRef = useRef();
   const cursor = useRef();
   const [showCursor, setShowCursor] = useState(false);
-
-  useEffect(() => {
-    gsap.set(titleRef.current, { opacity: 1 });
-
-    const titleSplit = new SplitText(titleRef.current, { type: "chars" });
-    gsap.fromTo(
-      titleSplit.chars,
-      { "will-change": "opacity, transform", filter: "blur(8px)", opacity: 0, yPercent: 50 },
-      { delay: 0.15, opacity: 1, filter: "blur(0px)", yPercent: 0, stagger: 0.015, duration: 0.5, ease: "power1" }
-    );
-
-    gsap.to(descriptionRef.current, { opacity: 1, filter: "blur(0px)", duration: 0.4, delay: 0.25 });
-    gsap.to(buttonRef.current, { delay: 0.35, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "power1" });
-    gsap.to(tagsRef.current, { opacity: 1, filter: "blur(0px)", duration: 0.4, delay: 0.25 });
-  }, []);
 
   useEffect(() => {
     let mouseX = 0;
@@ -116,11 +92,11 @@ export const SectionHero = () => {
             <div className="hero-textbox">
               <div className="hero-titlebox">
                 <div className="hero-titlebox-gradient" />
-                <h1 className="headline hero-headline white" ref={titleRef}>
+                <h1 className="headline hero-headline white">
                   Crafting Digital <br /> Masterpieces
                 </h1>
               </div>
-              <p className="big-description grey opacity-blur" ref={descriptionRef}>
+              <p className="big-description grey opacity-blur">
                 Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality
               </p>
             </div>
@@ -128,7 +104,6 @@ export const SectionHero = () => {
               <button
                 type="button"
                 className="button button-transparent-border opacity-blur"
-                ref={buttonRef}
                 onClick={() => router.push("/contact")}
               >
                 <div className="button-content">
@@ -156,7 +131,7 @@ export const SectionHero = () => {
             </Canvas>
           </div>
         </div>
-        <div className="hero-content-bottom hero-service-marquee opacity-blur" ref={tagsRef}>
+        <div className="hero-content-bottom hero-service-marquee opacity-blur">
           <Marquee
             className="hero-service-marquee-row"
             gradient={true}

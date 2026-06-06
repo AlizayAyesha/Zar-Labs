@@ -2,15 +2,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ReactLenis } from 'lenis/react'
 import { SectionFooter } from "../Main/SectionFooter";
+import { LenisScrollTriggerSync } from "../Main/LenisScrollTriggerSync";
 import gsap from "gsap";
-import { SplitText } from "gsap/all";
 import { ScrollTrigger } from "gsap/all";
 import { ChevronDown } from "lucide-react";
 import { useCalendly } from "../Main/CalendlyProvider";
 import { AboutPartnersSection } from "./AboutPartnersSection";
 import { AboutTeamSection } from "./AboutTeamSection";
+import { preloadImages } from "../../lib/preloadImages";
 
-gsap.registerPlugin(SplitText, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 const STICKY_SERVICES = [
     {
@@ -97,27 +98,7 @@ export const AboutPageSection = () => {
     };
 
     useEffect(() => {
-        const headlineSplit = new SplitText(headlineRef.current, { type: "words" });
-        gsap.fromTo(headlineSplit.words, { willChange: "opacity", filter: "blur(8px)", opacity: 0 }, { opacity: 1, filter: "blur(0px)", stagger: 0.02, duration: 0.5, ease: "sine", scrollTrigger: { trigger: headlineRef.current, start: "top 92%", toggleActions: "play none none none" } });
-
-        const bodyEls = bodyRef.current?.querySelectorAll(".about-whyus-paragraph, .about-principles-heading, .about-principle-dropdown, .about-what-we-do-item");
-        if (bodyEls?.length) {
-            gsap.fromTo(bodyEls, { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.06, ease: "power2.out", scrollTrigger: { trigger: bodyRef.current, start: "top 90%", toggleActions: "play none none none" } });
-        }
-
-        if (imageRef.current) {
-            gsap.fromTo(imageRef.current, { opacity: 0, scale: 0.96, filter: "blur(6px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", ease: "power2.out", scrollTrigger: { trigger: imageRef.current, start: "top 92%", toggleActions: "play none none none" } });
-        }
-
-        const partnerEls = partnersRef.current?.querySelectorAll(".about-partners-header, .about-partner-card");
-        if (partnerEls?.length) {
-            gsap.fromTo(partnerEls, { opacity: 0, y: 48 }, { opacity: 1, y: 0, stagger: 0.12, duration: 0.85, ease: "power3.out", scrollTrigger: { trigger: partnersRef.current, start: "top 88%", toggleActions: "play none none none" } });
-        }
-
-        const teamEls = teamRef.current?.querySelectorAll(".about-team-header, .about-team-card, .about-team-units");
-        if (teamEls?.length) {
-            gsap.fromTo(teamEls, { opacity: 0, y: 40 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.75, ease: "power3.out", scrollTrigger: { trigger: teamRef.current, start: "top 88%", toggleActions: "play none none none" } });
-        }
+        preloadImages(STICKY_SERVICES.map((s) => s.image));
     }, []);
 
     useEffect(() => {
@@ -178,6 +159,7 @@ export const AboutPageSection = () => {
 
   return (
     <ReactLenis root>
+      <LenisScrollTriggerSync />
       <section className="about">
         <div className="about-content">
             <div className="about-whyus">

@@ -1,12 +1,13 @@
 /* eslint-disable react/jsx-key */
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import SplitText from "gsap/src/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { preloadImages } from "../../lib/preloadImages";
 
-gsap.registerPlugin(SplitText, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 const TOTAL_FRAMES = 300;
+const PRELOAD_COUNT = 12;
 
 function buildFrameUrls(isMobile) {
   const step = isMobile ? 6 : 2;
@@ -17,22 +18,44 @@ function buildFrameUrls(isMobile) {
   return urls;
 }
 
+function loadFrame(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.decoding = "async";
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error(url));
+    img.src = url;
+  });
+}
+
 function imageSequence({ canvas, urls, scrollTrigger, isMobile }) {
   const playhead = { frame: 0 };
   const ctx = canvas.getContext("2d");
   let curFrame = -1;
-  const images = new Array(urls.length);
+  const images = new Array(urls.length).fill(null);
 
   const drawCover = (img) => {
-    if (!img?.complete || !img.naturalWidth) return;
+    if (!img?.complete || !img.naturalWidth) return false;
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
-    if (!w || !h) return;
+    if (!w || !h) return false;
+
     const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
     const nw = img.naturalWidth * scale;
     const nh = img.naturalHeight * scale;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.clearRect(0, 0, w, h);
     ctx.drawImage(img, (w - nw) / 2, (h - nh) / 2, nw, nh);
+    return true;
+  };
+
+  const drawFrame = (index) => {
+    const frame = Math.max(0, Math.min(urls.length - 1, Math.round(index)));
+    if (frame === curFrame) return;
+    const img = images[frame];
+    if (img && drawCover(img)) {
+      curFrame = frame;
+    }
   };
 
   const resize = () => {
@@ -41,36 +64,46 @@ function imageSequence({ canvas, urls, scrollTrigger, isMobile }) {
     const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2);
     const w = parent.clientWidth;
     const h = parent.clientHeight;
+    if (!w || !h) return;
+
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const frame = Math.round(playhead.frame);
-    if (images[frame]) drawCover(images[frame]);
+    curFrame = -1;
+    drawFrame(playhead.frame);
   };
 
-  const updateImage = () => {
-    const frame = Math.round(playhead.frame);
-    if (frame === curFrame) return;
-    const img = images[frame];
-    if (img?.complete) {
-      drawCover(img);
-      curFrame = frame;
+  const updateImage = () => drawFrame(playhead.frame);
+
+  let cancelled = false;
+
+  (async () => {
+    try {
+      images[0] = await loadFrame(urls[0]);
+      if (!cancelled) {
+        resize();
+        drawFrame(0);
+        ScrollTrigger.refresh();
+      }
+    } catch (err) {
+      console.warn("[SectionFlower] first frame failed:", err.message);
     }
-  };
 
-  urls.forEach((url, i) => {
-    const img = new Image();
-    img.decoding = "async";
-    img.loading = i === 0 ? "eager" : "lazy";
-    img.src = url;
-    img.onload = () => {
-      images[i] = img;
-      if (i === 0 || i === Math.round(playhead.frame)) updateImage();
-    };
-    images[i] = img;
-  });
+    preloadImages(urls.slice(1, PRELOAD_COUNT)).catch(() => {});
+
+    urls.forEach((url, i) => {
+      if (i === 0) return;
+      loadFrame(url)
+        .then((img) => {
+          if (cancelled) return;
+          images[i] = img;
+          if (Math.round(playhead.frame) === i) drawFrame(i);
+        })
+        .catch((err) => console.warn("[SectionFlower] frame failed:", err.message));
+    });
+  })();
 
   resize();
   window.addEventListener("resize", resize);
@@ -83,6 +116,7 @@ function imageSequence({ canvas, urls, scrollTrigger, isMobile }) {
   });
 
   return () => {
+    cancelled = true;
     window.removeEventListener("resize", resize);
     tween.scrollTrigger?.kill();
     tween.kill();
@@ -99,7 +133,7 @@ export const SectionFlower = () => {
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const urls = buildFrameUrls(isMobile);
 
-    return imageSequence({
+    const cleanup = imageSequence({
       canvas,
       urls,
       isMobile,
@@ -110,33 +144,13 @@ export const SectionFlower = () => {
         scrub: 0.5,
       },
     });
-  }, []);
 
-  const textRef1 = useRef();
-  const textRef2 = useRef();
-  const textRef3 = useRef();
-  const textRef4 = useRef();
-  const textRef5 = useRef();
-  const textRef6 = useRef();
-  const textRef7 = useRef();
-  const textRef8 = useRef();
+    const refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 100);
 
-  useEffect(() => {
-    const refs = [textRef1, textRef2, textRef3, textRef4, textRef5, textRef6, textRef7, textRef8];
-    const splits = refs.map((ref) => new SplitText(ref.current, { type: "chars" }));
-
-    splits.forEach((split, index) => {
-      gsap.fromTo(
-        split.chars,
-        { opacity: 0.4 },
-        {
-          opacity: 1,
-          duration: 0.35,
-          stagger: 0.04,
-          scrollTrigger: { trigger: refs[index].current, start: "top 92%", toggleActions: "play none none none" },
-        }
-      );
-    });
+    return () => {
+      clearTimeout(refreshTimer);
+      cleanup?.();
+    };
   }, []);
 
   return (
@@ -150,32 +164,32 @@ export const SectionFlower = () => {
         <div className="flower-content-textbox">
           <div className="flower-content-textbox-item">
             <span>
-              <h1 className="subheadline white" ref={textRef1}>Grow</h1>
+              <h1 className="subheadline white">Grow</h1>
             </span>
             <span>
-              <h1 className="subheadline white" ref={textRef2}>Your</h1>
+              <h1 className="subheadline white">Your</h1>
             </span>
             <span>
-              <h1 className="subheadline white" ref={textRef3}>Digital</h1>
-            </span>
-          </div>
-          <div className="flower-content-textbox-item">
-            <span>
-              <h1 className="subheadline white" ref={textRef4}>Presence,</h1>
-            </span>
-            <span>
-              <h1 className="subheadline white" ref={textRef5}>Let</h1>
-            </span>
-            <span>
-              <h1 className="subheadline white" ref={textRef6}>Your</h1>
+              <h1 className="subheadline white">Digital</h1>
             </span>
           </div>
           <div className="flower-content-textbox-item">
             <span>
-              <h1 className="subheadline white" ref={textRef7}>Vision</h1>
+              <h1 className="subheadline white">Presence,</h1>
             </span>
             <span>
-              <h1 className="subheadline white" ref={textRef8}>Bloom</h1>
+              <h1 className="subheadline white">Let</h1>
+            </span>
+            <span>
+              <h1 className="subheadline white">Your</h1>
+            </span>
+          </div>
+          <div className="flower-content-textbox-item">
+            <span>
+              <h1 className="subheadline white">Vision</h1>
+            </span>
+            <span>
+              <h1 className="subheadline white">Bloom</h1>
             </span>
           </div>
         </div>

@@ -1,13 +1,9 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import React from "react";
 import Link from "next/link";
 import { Calendar, Instagram, Mail, MapPin, Phone, Twitter } from "lucide-react";
 import { useCalendly } from "./CalendlyProvider";
 import { ZAR_LABS_EMAIL, ZAR_LABS_PHONE, ZAR_LABS_PHONE_DISPLAY } from "../config/contact";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://www.instagram.com/zar_labs/", Icon: Instagram },
@@ -78,24 +74,11 @@ const FooterNavLink = ({ href, children, onClick, external }) => {
 
 export const SectionFooter = () => {
   const { openCalendly } = useCalendly();
-  const topRef1 = useRef();
-  const topRef2 = useRef();
-  const centerRef1 = useRef();
-  const bottomRef1 = useRef();
-  const bottomRef2 = useRef();
-
-  useEffect(() => {
-    gsap.fromTo(topRef1.current, { filter: "blur(8px)", opacity: 0 }, { delay: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "sine", scrollTrigger: { trigger: topRef1.current, start: "top 95%" } });
-    gsap.fromTo(topRef2.current, { filter: "blur(8px)", opacity: 0 }, { delay: 0.2, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "sine", scrollTrigger: { trigger: topRef1.current, start: "top 95%" } });
-    gsap.fromTo(centerRef1.current, { filter: "blur(8px)", opacity: 0 }, { delay: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "sine", scrollTrigger: { trigger: centerRef1.current, start: "top 95%" } });
-    gsap.fromTo(bottomRef1.current, { filter: "blur(8px)", opacity: 0 }, { delay: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "sine", scrollTrigger: { trigger: bottomRef1.current, start: "top 95%" } });
-    gsap.fromTo(bottomRef2.current, { filter: "blur(8px)", opacity: 0 }, { delay: 0.2, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "sine", scrollTrigger: { trigger: bottomRef2.current, start: "top 95%" } });
-  }, []);
 
   return (
     <section className="footer">
       <div className="footer-content">
-        <div className="footer-content-left" ref={topRef1}>
+        <div className="footer-content-left">
           <img src="/images/zarlabs-logo.webp" className="footer-logo" alt="Zar Labs" />
           <h1 className="subheadline white">Zar Labs</h1>
           <p className="description grey footer-tagline">
@@ -136,7 +119,7 @@ export const SectionFooter = () => {
             ))}
           </div>
         </div>
-        <div className="footer-content-right" ref={topRef2}>
+        <div className="footer-content-right">
           <FooterColumn title="Company">
             {COMPANY_LINKS.map((link) => (
               <div key={link.label} className="footer-column-contents-item">
@@ -171,12 +154,12 @@ export const SectionFooter = () => {
           </FooterColumn>
         </div>
       </div>
-      <div className="footer-divider" ref={centerRef1} />
+      <div className="footer-divider" />
       <div className="footer-content-bottom">
-        <p className="small-description grey" ref={bottomRef1}>
+        <p className="small-description grey">
           © {new Date().getFullYear()} Zar Labs. All rights reserved.
         </p>
-        <div className="footer-content-bottom-links" ref={bottomRef2}>
+        <div className="footer-content-bottom-links">
           <FooterNavLink href="/faq">FAQ</FooterNavLink>
           <span className="footer-bottom-dot" />
           <FooterNavLink href="/contact">Support</FooterNavLink>

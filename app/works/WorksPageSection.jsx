@@ -2,19 +2,36 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ReactLenis } from 'lenis/react'
 import "./works.css";
+import { LenisScrollTriggerSync } from "../Main/LenisScrollTriggerSync";
 import { PrevButton, NextButton, usePrevNextButtons} from "../Main/Carousel/EmblaCarouselArrowButtons"
 import useEmblaCarousel from "embla-carousel-react"
 import { ArrowUpRight, Zap } from "lucide-react";
 import { SectionFooter } from "../Main/SectionFooter";
 import { usePathname, useRouter } from 'next/navigation';
 import gsap from "gsap";
-import SplitText from "gsap/src/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import Image from "next/image";
-import { useCalendly } from "../Main/CalendlyProvider";
 import { CASE_STUDIES } from "./case-studies-data";
+import { useCalendly } from "../Main/CalendlyProvider";
+import { PreloadedImage } from "../Main/PreloadedImage";
+import { preloadImages } from "../../lib/preloadImages";
 
-gsap.registerPlugin(SplitText, ScrollTrigger);
+const WORKS_MOCKUP_IMAGES = [
+  "/mockups/heave.webp",
+  "/mockups/essentia.webp",
+  "/mockups/kinimatic.webp",
+  "/mockups/peak.webp",
+  "/mockups/vitalenta.webp",
+  "/mockups/rev.webp",
+];
+
+const WORKS_INDUSTRY_IMAGES = [
+  "/images/test14.webp",
+  "/images/test17.webp",
+  "/images/test18.webp",
+  "/images/test19.webp",
+];
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const WorksPageSection = () => {
   const { openCalendly } = useCalendly();
@@ -55,45 +72,27 @@ export const WorksPageSection = () => {
   const [showCursor, setShowCursor] = useState(false)
 
   useEffect(() => {
+    let cancelled = false;
 
-    // headline text animation
-    const titleSplit = new SplitText(titleRef.current, { type: "chars" });
-    gsap.fromTo(titleSplit.chars, { 'will-change': 'opacity, transform', filter: 'blur(8px)', opacity: 0, yPercent: 50 }, { delay: 0.2, opacity: 1, filter: 'blur(0px)', yPercent: 0, stagger: 0.02, duration: 0.75, ease: "power1" });
+    const revealCarousel = () => {
+      if (cancelled || !worksItemRef1.current) return;
+      gsap.to(worksItemRef1.current, { opacity: 0, duration: 0.75, ease: "power1" });
+    };
 
-    // description text animation
-    gsap.to(descriptionRef.current, { opacity: 1, filter: 'blur(0px)', duration: 1, delay: 0.6 })
+    preloadImages([
+      ...WORKS_MOCKUP_IMAGES,
+      ...WORKS_INDUSTRY_IMAGES,
+      ...CASE_STUDIES.map((s) => s.carouselImage),
+    ]).finally(revealCarousel);
 
-    // line animation
-    gsap.fromTo(lineRef.current, { opacity: 0, filter: 'blur(8px)' }, { opacity: 1, filter: 'blur(0px)', duration: 0.5, delay: 0.5 })
-
-    // work carousel items animation
-    gsap.to(worksItemRef1.current, { delay: 0.4, opacity: 0, duration: 1, ease: 'power1' });
-
-    // industry images
     gsap.fromTo(industryImageRef1.current, { width: 0 }, { width: "100%", scrollTrigger: { trigger: industryImageRef1.current, start: "top bottom", end: "center center", scrub: true } });
     gsap.fromTo(industryImageRef2.current, { width: 0 }, { width: "100%", scrollTrigger: { trigger: industryImageRef2.current, start: "top bottom", end: "center center", scrub: true } });
     gsap.fromTo(industryImageRef3.current, { width: 0 }, { width: "100%", scrollTrigger: { trigger: industryImageRef3.current, start: "top bottom", end: "center center", scrub: true } });
     gsap.fromTo(industryImageRef4.current, { width: 0 }, { width: "100%", scrollTrigger: { trigger: industryImageRef4.current, start: "top bottom", end: "center center", scrub: true } });
 
-    // case studies wrapper animation
-    gsap.to(carouselWrapperRef.current, { opacity: 1, filter: 'blur(0px)', duration: 1, ease: 'power1', scrollTrigger: { trigger: carouselWrapperRef.current, start: "top 95%" } });
-
-    // subheadline box animation
-    gsap.to(subheadlineBoxRef1.current, { opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: 'power1', scrollTrigger: { trigger: subheadlineBoxRef1.current, start: "top 95%" }});
-    gsap.to(subheadlineBoxRef2.current, { opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: 'power1', scrollTrigger: { trigger: subheadlineBoxRef2.current, start: "top 95%" }});
-
-    // subtitle text animation
-    const subtitleSplit1 = new SplitText(subtitleRef1.current, { type: "words" });
-    const subtitleSplit2 = new SplitText(subtitleRef2.current, { type: "words" });
-    gsap.fromTo(subtitleSplit1.words, { 'will-change': 'opacity, transform', filter: 'blur(8px)', opacity: 0, yPercent: 50 }, { opacity: 1, filter: 'blur(0px)', yPercent: 0, stagger: 0.05, duration: 0.75, ease: "power2", scrollTrigger: { trigger: subtitleRef1.current, start: "top 95%" } });
-    gsap.fromTo(subtitleSplit2.words, { 'will-change': 'opacity, transform', filter: 'blur(8px)', opacity: 0, yPercent: 50 }, { opacity: 1, filter: 'blur(0px)', yPercent: 0, stagger: 0.05, duration: 0.75, ease: "power2", scrollTrigger: { trigger: subtitleRef2.current, start: "top 95%" } });
-
-    // description text animation
-    const subdescriptionSplit1 = new SplitText(subdescriptionRef1.current, { type: "words" });
-    const subdescriptionSplit2 = new SplitText(subdescriptionRef2.current, { type: "words" });
-    gsap.fromTo(subdescriptionSplit1.words, { filter: 'blur(8px)', opacity: 0 }, { opacity: 1, filter: 'blur(0px)', stagger: 0.025, ease: 'sine', scrollTrigger: { trigger: subdescriptionRef1.current, start: "top 95%" } });
-    gsap.fromTo(subdescriptionSplit2.words, { filter: 'blur(8px)', opacity: 0 }, { opacity: 1, filter: 'blur(0px)', stagger: 0.025, ease: 'sine', scrollTrigger: { trigger: subdescriptionRef2.current, start: "top 95%" } });
-
+    return () => {
+      cancelled = true;
+    };
   }, [])
 
   // FOLLOWING CURSOR
@@ -207,6 +206,7 @@ export const WorksPageSection = () => {
 
   return (
     <ReactLenis root>
+      <LenisScrollTriggerSync />
       <section className="works" >
         <div className="works-content" >
           <div className="works-content-top">
@@ -221,8 +221,8 @@ export const WorksPageSection = () => {
               <div className="works-content-top-divider" ref={lineRef} />
             </div>
             <div className="works-carousel-wrapper" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
-              <div className="works-carousel-wrapper-overlay" ref={worksItemRef1} ></div>
               <div className="works-carousel" ref={emblaRef2} >
+                <div className="works-carousel-wrapper-overlay" ref={worksItemRef1} />
                 <div className="works-carousel-row">
                   <div className="works-item-padding" />
                   <div className="works-item" >
@@ -238,7 +238,7 @@ export const WorksPageSection = () => {
                           </div>
                         </div>
                       </div>
-                      <Image src="/mockups/heave.webp" className="works-item-content-image" width={750} height={750} unoptimized loading="lazy" alt="Heavecorp project" />
+                      <PreloadedImage src="/mockups/heave.webp" className="works-item-content-image" width={750} height={750} priority alt="Heavecorp project" />
                     </div>
                     <div className="works-item-border" />
                   </div>
@@ -255,7 +255,7 @@ export const WorksPageSection = () => {
                           </div>
                         </div>
                       </div>
-                      <Image src="/mockups/essentia.webp" className="works-item-content-image" width={750} height={750} unoptimized loading="lazy"  alt="" />
+                      <PreloadedImage src="/mockups/essentia.webp" className="works-item-content-image" width={750} height={750} priority alt="Essentia project" />
                     </div>
                     <div className="works-item-border" />
                   </div>
@@ -272,7 +272,7 @@ export const WorksPageSection = () => {
                           </div>
                         </div>
                       </div>
-                      <Image src="/mockups/kinimatic.webp" className="works-item-content-image" width={750} height={750} unoptimized loading="lazy"  alt="" />
+                      <PreloadedImage src="/mockups/kinimatic.webp" className="works-item-content-image" width={750} height={750} priority alt="Kinimatic project" />
                     </div>
                     <div className="works-item-border" />
                   </div>
@@ -289,7 +289,7 @@ export const WorksPageSection = () => {
                           </div>
                         </div>
                       </div>
-                      <Image src="/mockups/peak.webp" className="works-item-content-image" width={750} height={750} unoptimized loading="lazy"  alt="" />
+                      <PreloadedImage src="/mockups/peak.webp" className="works-item-content-image" width={750} height={750} priority alt="Peak Creations project" />
                     </div>
                     <div className="works-item-border" />
                   </div>
@@ -306,7 +306,7 @@ export const WorksPageSection = () => {
                           </div>
                         </div>
                       </div>
-                      <Image src="/mockups/vitalenta.webp" className="works-item-content-image" width={750} height={750} unoptimized loading="lazy"  alt="" />
+                      <PreloadedImage src="/mockups/vitalenta.webp" className="works-item-content-image" width={750} height={750} priority alt="Vita Lenta project" />
                     </div>
                     <div className="works-item-border" />
                   </div>
@@ -323,7 +323,7 @@ export const WorksPageSection = () => {
                           </div>
                         </div>
                       </div>
-                      <Image src="/mockups/rev.webp" className="works-item-content-image" width={750} height={750} unoptimized loading="lazy"  alt="" />
+                      <PreloadedImage src="/mockups/rev.webp" className="works-item-content-image" width={750} height={750} priority alt="Rev Productions project" />
                     </div>
                     <div className="works-item-border" />
                   </div>
@@ -379,7 +379,7 @@ export const WorksPageSection = () => {
                 </div>
                 <div className="works-industries-item-right">
                   <div className="works-industries-item-right-imagebox" ref={industryImageRef1} >
-                    <img src="/images/test14.webp" className="works-industries-item-right-image" alt="" />
+                    <PreloadedImage src="/images/test14.webp" className="works-industries-item-right-image" alt="Supply chain and logistics" />
                   </div>
                 </div>
               </div>
@@ -390,7 +390,7 @@ export const WorksPageSection = () => {
                 </div>
                 <div className="works-industries-item-right">
                   <div className="works-industries-item-right-imagebox" ref={industryImageRef2} >
-                    <img src="/images/test17.webp" className="works-industries-item-right-image" alt="" />
+                    <PreloadedImage src="/images/test17.webp" className="works-industries-item-right-image" alt="Luxury travel and hospitality" />
                   </div>
                 </div>
               </div>
@@ -401,7 +401,7 @@ export const WorksPageSection = () => {
                 </div>
                 <div className="works-industries-item-right">
                   <div className="works-industries-item-right-imagebox" ref={industryImageRef3} >
-                    <img src="/images/test18.webp" className="works-industries-item-right-image" alt="" />
+                    <PreloadedImage src="/images/test18.webp" className="works-industries-item-right-image" alt="Real estate and development" />
                   </div>
                 </div>
               </div>
@@ -412,7 +412,7 @@ export const WorksPageSection = () => {
                 </div>
                 <div className="works-industries-item-right">
                   <div className="works-industries-item-right-imagebox" ref={industryImageRef4} >
-                    <img src="/images/test19.webp" className="works-industries-item-right-image" alt="" />
+                    <PreloadedImage src="/images/test19.webp" className="works-industries-item-right-image" alt="Technology and AI" />
                   </div>
                 </div>
               </div>
@@ -466,10 +466,11 @@ export const WorksPageSection = () => {
                             </div>
                             <ArrowUpRight className="casestudies-item-content-imagebox-button-icon" />
                           </div>
-                          <img
+                          <PreloadedImage
                             src={study.carouselImage}
                             className="casestudies-item-content-image"
                             alt={study.title}
+                            priority
                           />
                         </div>
                       </div>

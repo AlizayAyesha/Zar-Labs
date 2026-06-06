@@ -1,55 +1,13 @@
 /* eslint-disable react/jsx-key */
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import SplitText from "gsap/src/SplitText";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import { PrevButton, NextButton, usePrevNextButtons } from "./Carousel/EmblaCarouselArrowButtons";
-import useEmblaCarousel from "embla-carousel-react";
 import { Send } from "lucide-react";
 import { useCalendly } from "./CalendlyProvider";
+import { PrevButton, NextButton, usePrevNextButtons } from "./Carousel/EmblaCarouselArrowButtons";
+import useEmblaCarousel from "embla-carousel-react";
 import { TESTIMONIALS } from "./testimonials-data";
-
-gsap.registerPlugin(SplitText, ScrollTrigger);
 
 export const SectionTestimonials = () => {
   const { openCalendly } = useCalendly();
-
-  const subheadlineBoxRef = useRef();
-  const titleRef = useRef();
-  const emblaWrapperRef = useRef();
-
-  useEffect(() => {
-    gsap.to(subheadlineBoxRef.current, {
-      opacity: 1,
-      filter: "blur(0px)",
-      duration: 0.5,
-      ease: "power1",
-      scrollTrigger: { trigger: subheadlineBoxRef.current, start: "top 95%" },
-    });
-
-    const titleSplit = new SplitText(titleRef.current, { type: "words" });
-    gsap.fromTo(
-      titleSplit.words,
-      { "will-change": "opacity, transform", filter: "blur(8px)", opacity: 0, yPercent: 50 },
-      {
-        opacity: 1,
-        filter: "blur(0px)",
-        yPercent: 0,
-        stagger: 0.05,
-        duration: 0.75,
-        ease: "power2",
-        scrollTrigger: { trigger: titleRef.current, start: "top 95%" },
-      }
-    );
-
-    gsap.to(emblaWrapperRef.current, {
-      opacity: 1,
-      filter: "blur(0px)",
-      duration: 0.5,
-      ease: "power1",
-      scrollTrigger: { trigger: emblaWrapperRef.current, start: "top 95%" },
-    });
-  }, []);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true, align: "start" });
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -73,19 +31,19 @@ export const SectionTestimonials = () => {
     <section className="testimonials">
       <div className="testimonials-content">
         <div className="textbox testimonials-content-textbox">
-          <div className="subheadline-box opacity-blur" ref={subheadlineBoxRef}>
+          <div className="subheadline-box opacity-blur">
             <Send className="subheadline-box-icon" />
             <h2 className="small-description grey">Client success stories</h2>
           </div>
           <div className="titlebox">
             <div className="titlebox-big-gradient" />
-            <h1 className="subheadline white" ref={titleRef}>
+            <h1 className="subheadline white">
               Don&apos;t Take Our Word For It! <br />
               Hear It From Our Partners.
             </h1>
           </div>
         </div>
-        <div className="opacity-blur" ref={emblaWrapperRef}>
+        <div className="opacity-blur">
           <div className="testimonials-carousel" ref={emblaRef}>
             <div className="testimonials-carousel-row">
               <div className="testimonials-item-padding" />
