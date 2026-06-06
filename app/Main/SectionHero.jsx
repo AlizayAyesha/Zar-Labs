@@ -109,6 +109,7 @@ export const SectionHero = () => {
       <div className="hero-background-element-small" />
       <div className="hero-background-element-grid-small" />
       <div className="hero-gradient-bottom-right" aria-hidden="true" />
+      <div className="hero-carousel-backdrop" aria-hidden="true" />
       <div className="hero-content">
         <div className="hero-content-row">
           <div className="hero-content-left">
@@ -159,7 +160,7 @@ export const SectionHero = () => {
           <Marquee
             className="hero-service-marquee-row"
             gradient={true}
-            gradientColor="#010101"
+            gradientColor="#000000"
             gradientWidth={120}
             speed={35}
           >

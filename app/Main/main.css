@@ -200,13 +200,32 @@
     width: 55%;
     height: 50%;
     background: radial-gradient(
-        ellipse 115% 95% at 100% 100%,
-        rgba(1, 1, 1, 0.92) 0%,
-        rgba(1, 1, 1, 0.55) 42%,
-        transparent 72%
+        ellipse 120% 100% at 100% 100%,
+        rgba(0, 0, 0, 0.75) 0%,
+        transparent 70%
     );
     pointer-events: none;
     z-index: 0;
+}
+
+/* Full-width black band where the service tag carousel sits */
+.hero-carousel-backdrop {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20vh;
+    background: linear-gradient(
+        to top,
+        #000000 0%,
+        #000000 28%,
+        #010101 50%,
+        rgba(1, 1, 1, 0.88) 68%,
+        rgba(1, 1, 1, 0.35) 85%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
 }
 
 .hero-content {
@@ -217,6 +236,7 @@
     color: white;
     gap: 5vh;
     position: relative;
+    z-index: 2;
 }
 
 .hero-content-row {
@@ -282,10 +302,36 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     position: absolute;
-    bottom: 2.5vh;
+    bottom: 2%;
     left: 0;
+    padding: 2.5vh 0 3vh;
+    z-index: 2;
+}
+
+.hero-service-marquee {
+    opacity: 0;
+    filter: blur(8px);
+    width: 100%;
+    position: relative;
+}
+
+.hero-service-marquee::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255, 255, 255, 0.06) 20%,
+        rgba(255, 255, 255, 0.06) 80%,
+        transparent 100%
+    );
+    pointer-events: none;
 }
 
 .hero-content-bottom-item {
@@ -305,11 +351,6 @@
 .hero-content-bottom-image {
     height: 2.5vh;
     width: auto;
-}
-
-.hero-service-marquee {
-    opacity: 0;
-    filter: blur(8px);
 }
 
 .hero-service-marquee-row {
@@ -1363,18 +1404,25 @@
 }
 
 .hero-content-bottom {
-    bottom: 2.5vw;
+    bottom: 2%;
+    padding: 4vw 0 5vw;
 }
 
-.hero-content-bottom-item {
-    height: 10vw;
-    padding: 0 5vw;
-    margin-left: 2.5vw;
+.hero-carousel-backdrop {
+    height: 32vw;
+    background: linear-gradient(
+        to top,
+        #000000 0%,
+        #000000 32%,
+        #010101 55%,
+        rgba(1, 1, 1, 0.9) 72%,
+        transparent 100%
+    );
 }
 
-.hero-content-bottom-image {
-    height: 4.5vw;
-    width: auto;
+.hero-gradient-bottom-right {
+    width: 100%;
+    height: 45%;
 }
 
 .hero-service-marquee-item {
@@ -1383,17 +1431,11 @@
 }
 
 .hero-service-tag {
-    padding: 0.5vw 0.75vw;
     font-size: calc(5vw * 1.02);
 }
 
 .hero-service-tag-sep {
     font-size: calc(5vw * 1.02);
-}
-
-.hero-gradient-bottom-right {
-    width: 85%;
-    height: 55%;
 }
  
 /* SERVICES */
