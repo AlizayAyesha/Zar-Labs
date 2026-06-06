@@ -103,7 +103,7 @@ export const AboutPartnersSection = ({ sectionRef }) => (
           className={`about-partner-card about-partner-card--${partner.accent}`}
         >
           <div className="about-partner-card-border" aria-hidden="true" />
-          <div className="about-partner-card-media about-partner-card-media--brand">
+          <div className={`about-partner-card-media about-partner-card-media--brand${partner.id === "vyzion" ? " about-partner-card-media--cover" : ""}`}>
             <img src={partner.image} alt={partner.imageAlt} className="about-partner-card-image" />
             <div className="about-partner-card-media-overlay" />
             <span className="about-partner-card-badge">{partner.badge}</span>

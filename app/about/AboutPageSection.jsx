@@ -98,7 +98,7 @@ export const AboutPageSection = () => {
 
     useEffect(() => {
         const headlineSplit = new SplitText(headlineRef.current, { type: "words" });
-        gsap.fromTo(headlineSplit.words, { willChange: "opacity", filter: "blur(8px)", opacity: 0 }, { opacity: 1, filter: "blur(0px)", stagger: 0.025, ease: "sine", scrollTrigger: { trigger: headlineRef.current, start: "top 95%", end: "bottom center", scrub: true } });
+        gsap.fromTo(headlineSplit.words, { willChange: "opacity", filter: "blur(8px)", opacity: 0 }, { opacity: 1, filter: "blur(0px)", stagger: 0.02, duration: 0.5, ease: "sine", scrollTrigger: { trigger: headlineRef.current, start: "top 92%", toggleActions: "play none none none" } });
 
         const bodyEls = bodyRef.current?.querySelectorAll(".about-whyus-paragraph, .about-principles-heading, .about-principle-dropdown, .about-what-we-do-item");
         if (bodyEls?.length) {
@@ -124,46 +124,56 @@ export const AboutPageSection = () => {
         const items = stickyContainerRef.current?.querySelectorAll(".about-sticky-item");
         if (!items?.length) return;
 
-        const triggers = [];
+        const mm = gsap.matchMedia();
 
-        items.forEach((el, position) => {
-            const isLast = position === items.length - 1;
+        mm.add("(min-width: 769px)", () => {
+            const triggers = [];
 
-            gsap.set(el, { willChange: "transform, filter" });
+            items.forEach((el, position) => {
+                const isLast = position === items.length - 1;
 
-            const timeline = gsap.timeline({
-                scrollTrigger: {
-                    trigger: el,
-                    start: "center center",
-                    end: "350%",
-                    scrub: true,
-                },
+                gsap.set(el, { willChange: "transform, filter" });
+
+                const timeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "center center",
+                        end: "350%",
+                        scrub: true,
+                    },
+                });
+
+                timeline
+                .to(el, {
+                    ease: "none",
+                    startAt: { filter: "blur(0px)" },
+                    filter: isLast ? "blur(0px)" : "blur(3px)",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "center center",
+                        end: "+=100%",
+                        scrub: true,
+                    },
+                }, 0)
+                .to(el, {
+                    ease: "none",
+                    scale: isLast ? 1 : 0.55,
+                    yPercent: isLast ? 0 : -45,
+                }, 0);
+
+                triggers.push(timeline.scrollTrigger);
             });
 
-            timeline
-            .to(el, {
-                ease: "none",
-                startAt: { filter: "blur(0px)" },
-                filter: isLast ? "blur(0px)" : "blur(3px)",
-                scrollTrigger: {
-                    trigger: el,
-                    start: "center center",
-                    end: "+=100%",
-                    scrub: true,
-                },
-            }, 0)
-            .to(el, {
-                ease: "none",
-                scale: isLast ? 1 : 0.55,
-                yPercent: isLast ? 0 : -45,
-            }, 0);
-
-            triggers.push(timeline.scrollTrigger);
+            return () => {
+                triggers.forEach((trigger) => trigger?.kill());
+            };
         });
 
-        return () => {
-            triggers.forEach((trigger) => trigger?.kill());
-        };
+        mm.add("(max-width: 768px)", () => {
+            gsap.set(items, { clearProps: "transform,filter,scale,y" });
+        });
+
+        return () => mm.revert();
     }, []);
 
   return (

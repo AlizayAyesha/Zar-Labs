@@ -1,23 +1,13 @@
 /* eslint-disable react/jsx-key */
-import React, { Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import SplitText from "gsap/src/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { ArrowUpRight, ChevronRight, Hand, Layers, Link, Send } from "lucide-react";
-import useEmblaCarousel from "embla-carousel-react";
-import { PrevButton, NextButton, usePrevNextButtons} from "./Carousel/EmblaCarouselArrowButtons"
-import { DotButton, useDotButton } from './Carousel/EmblaCarouselDotButton'
-import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, Layers } from "lucide-react";
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
-const TWEEN_FACTOR_BASE = 0.25
-
-const numberWithinRange = (number, min, max) => Math.min(Math.max(number, min), max)
-
 export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
-
-    // GSAP ANIMATIONS
 
     const subheadlineBoxRef = useRef()
     const titleRef = useRef()
@@ -28,18 +18,14 @@ export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
 
     useEffect(() => {
 
-    // subheadline box animation
     gsap.to(subheadlineBoxRef.current, { opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: 'power1', scrollTrigger: { trigger: subheadlineBoxRef.current, start: "top 95%" }});
 
-    // headline text animation
     const titleSplit = new SplitText(titleRef.current, { type: "words" });
     gsap.fromTo(titleSplit.words, { 'will-change': 'opacity, transform', filter: 'blur(8px)', opacity: 0, yPercent: 50 }, { opacity: 1, filter: 'blur(0px)', yPercent: 0, stagger: 0.05, duration: 0.75, ease: "power2", scrollTrigger: { trigger: titleRef.current, start: "top 95%" } });
 
-    // description text animation
     const descriptionSplit = new SplitText(descriptionRef.current, { type: "words" });
     gsap.fromTo(descriptionSplit.words, { filter: 'blur(8px)', opacity: 0 }, { opacity: 1, filter: 'blur(0px)', stagger: 0.025, ease: 'sine', scrollTrigger: { trigger: descriptionRef.current, start: "top 95%" } });
 
-    // bento grid boxes animations
     gsap.fromTo(bentoBoxRef1.current, { rotationY: 30, scale: 0.6, opacity: 0 }, { rotationY: 0, scale: 1, opacity: 1, duration: 0.75, ease: 'power1', scrollTrigger: { trigger: bentoBoxRef1.current, start: "top bottom" }});
     gsap.fromTo(bentoBoxRef2.current, { rotationY: 30, scale: 0.6, opacity: 0 }, { rotationY: 0, scale: 1, opacity: 1, duration: 0.75, ease: 'power1', scrollTrigger: { trigger: bentoBoxRef2.current, start: "top bottom" }});
     const addClassnames = () => {
@@ -57,7 +43,6 @@ export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
 
     }, [])
 
-    // VIDEO
     const videoRef = useRef(null);
 
     const handleVideoButtonClick = () => {
@@ -65,104 +50,6 @@ export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
             videoRef.current.play();
         }
     };
-
-    // EMBLA CAROUSEL
-
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, watchDrag: false });
-
-    const { selectedIndex, scrollSnaps, onDotButtonClick } =
-    useDotButton(emblaApi)
-
-    const tweenFactor = useRef(0);
-    const tweenNodes = useRef([]);
-    
-    const {
-      prevBtnDisabled,
-      nextBtnDisabled,
-      onPrevButtonClick,
-      onNextButtonClick,
-    } = usePrevNextButtons(emblaApi);
-    
-    const setTweenNodes = useCallback((emblaApi) => {
-      tweenNodes.current = emblaApi
-        .slideNodes()
-        .map((slideNode) =>
-          slideNode.querySelector('.techstack-item-content-column-slider-item-child')
-        );
-    }, []);
-    
-    const setTweenFactor = useCallback((emblaApi) => {
-      tweenFactor.current = TWEEN_FACTOR_BASE * emblaApi.scrollSnapList().length;
-    }, []);
-    
-    const tweenEffects = useCallback((emblaApi, eventName) => {
-      const engine = emblaApi.internalEngine();
-      const scrollProgress = emblaApi.scrollProgress();
-      const slidesInView = emblaApi.slidesInView();
-      const isScrollEvent = eventName === 'scroll';
-    
-      emblaApi.scrollSnapList().forEach((scrollSnap, snapIndex) => {
-        let diffToTarget = scrollSnap - scrollProgress;
-        const slidesInSnap = engine.slideRegistry[snapIndex];
-    
-        slidesInSnap.forEach((slideIndex) => {
-          if (isScrollEvent && !slidesInView.includes(slideIndex)) return;
-    
-          if (engine.options.loop) {
-            engine.slideLooper.loopPoints.forEach((loopItem) => {
-              const target = loopItem.target();
-    
-              if (slideIndex === loopItem.index && target !== 0) {
-                const sign = Math.sign(target);
-    
-                if (sign === -1) {
-                  diffToTarget = scrollSnap - (1 + scrollProgress);
-                }
-                if (sign === 1) {
-                  diffToTarget = scrollSnap + (1 - scrollProgress);
-                }
-              }
-            });
-          }
-    
-          const tweenValue = 1 - Math.abs(diffToTarget * tweenFactor.current);
-          const scale = numberWithinRange(tweenValue, 0, 1).toString();
-          const opacity = numberWithinRange(tweenValue, 0, 1).toString();
-    
-          // Apply scale effect
-          const tweenNode = tweenNodes.current[slideIndex];
-          if (tweenNode) {
-            tweenNode.style.transform = `scale(${scale})`;
-          }
-    
-          // Apply opacity effect
-          emblaApi.slideNodes()[slideIndex].style.opacity = opacity;
-        });
-      });
-    }, []);
-    
-    useEffect(() => {
-      if (!emblaApi) return;
-    
-      setTweenNodes(emblaApi);
-      setTweenFactor(emblaApi);
-      tweenEffects(emblaApi);
-    
-      emblaApi
-        .on('reInit', setTweenNodes)
-        .on('reInit', setTweenFactor)
-        .on('reInit', tweenEffects)
-        .on('scroll', tweenEffects)
-        .on('slideFocus', tweenEffects);
-    }, [emblaApi, setTweenNodes, setTweenFactor, tweenEffects]);
-
-    const slideDescriptions = [
-        "We create stunning 3D models, animations, and realistic environments for immersive experiences.",
-        "Dynamic motion graphics and cinematic visual effects brought to life with seamless precision.",
-        "Precision-crafted designs and visuals with unmatched detail for polished, professional results.",
-        "Professional-grade video editing and vibrant color grading for high-quality storytelling impact.",
-        "Complex simulations and breathtaking VFX for cutting-edge creativity in every project.",
-    ];
 
   return (
     <section className="techstack tech-pattern-bg">
@@ -202,86 +89,14 @@ export const SectionTechstack = ({ videoSrc = "/videos/logos.mp4" }) => {
                 </div>
                 <div className="techstack-item-small techstack-item-small-mobile-big" ref={bentoBoxRef2} >
                     <div className="techstack-item-content">
-                        <div className="techstack-item-content-column">
-                            <div className="techstack-item-content-column-slider">
-                                <img src="/images/abs.webp" className="techstack-item-content-column-slider-image" alt="" />
-                                <div className="techstack-item-content-column-slider-carousel" ref={emblaRef} >
-                                    <div className="techstack-item-content-column-slider-carousel-row">
-                                        <div className="techstack-item-content-column-slider-item">
-                                            <div className="techstack-item-content-column-slider-item-child">
-                                                <img src="/logos/blenderwhite.svg" className="techstack-item-content-column-slider-item-image" alt="" />
-                                            </div>
-                                        </div>
-                                        <div className="techstack-item-content-column-slider-item">
-                                            <div className="techstack-item-content-column-slider-item-child">
-                                                <img src="/logos/ae.svg" className="techstack-item-content-column-slider-item-image" alt="" />
-                                            </div>
-                                        </div>
-                                        <div className="techstack-item-content-column-slider-item">
-                                            <div className="techstack-item-content-column-slider-item-child">
-                                                <img src="/logos/photoshop.svg" className="techstack-item-content-column-slider-item-image" alt="" />
-                                            </div>
-                                        </div>
-                                        <div className="techstack-item-content-column-slider-item">
-                                            <div className="techstack-item-content-column-slider-item-child">
-                                                <img src="/logos/davinciresolvewhite.svg" className="techstack-item-content-column-slider-item-image" alt="" />
-                                            </div>
-                                        </div>
-                                        <div className="techstack-item-content-column-slider-item">
-                                            <div className="techstack-item-content-column-slider-item-child">
-                                                <img src="/logos/houdiniwhite.svg" className="techstack-item-content-column-slider-item-image" alt="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="techstack-item-content-column techstack-item-content-column--integration">
                             <div className="techstack-item-content-column-textbox">
-                                <h2 className="small-subheadline white" >Integration Is Key</h2>
-                                <motion.p
-                                    key={selectedIndex}
-                                    className="description grey"
-                                    initial={{ opacity: 0, filter: "blur(10px)" }}
-                                    animate={{ opacity: 1, filter: "blur(0px)" }}
-                                    exit={{ opacity: 0, filter: "blur(10px)" }}
-                                    transition={{ duration: 0.5 }}
-                                >
-                                    {slideDescriptions[selectedIndex]}
-                                </motion.p>
-                            </div>
-                            <div className="techstack-item-content-column-border" />
-                            <div className="techstack-item-content-column-bottom">
-                                <div className="techstack-item-content-column-bottom-left">
-                                    <button className=" button techstack-item-content-column-bottom-button" onClick={onPrevButtonClick} >
-                                        <div className="button-content">
-                                            <span className="small-description">Previous</span>
-                                            <span className="small-description">Previous</span>
-                                        </div>
-                                    </button>
-                                </div>
-                                <div className="techstack-item-content-column-bottom-center">
-                                    <div className="embla__dots-small">
-                                        {scrollSnaps.map((_, index) => (
-                                            <DotButton
-                                                key={index}
-                                                onClick={() => onDotButtonClick(index)}
-                                                className={'embla__dot-small'.concat(
-                                                    index === selectedIndex ? ' embla__dot--selected-small' : ''
-                                                )}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="techstack-item-content-column-bottom-right">
-                                    <button className="button techstack-item-content-column-bottom-button" onClick={onNextButtonClick} >
-                                        <div className="button-content">
-                                            <span className="small-description">Continue</span>
-                                            <span className="small-description">Continue</span>
-                                        </div>
-                                    </button>
-                                </div>
+                                <h2 className="small-subheadline white">Integration Is Key</h2>
+                                <p className="description grey">
+                                    We connect APIs, cloud services, CRMs, and business tools into one unified stack—so your systems work together, not in silos.
+                                </p>
                             </div>
                         </div>
-
                     </div>
                     <div className="background-gradient-circle" />
                 </div>

@@ -39,12 +39,12 @@ export const SectionHero = () => {
     gsap.fromTo(
       titleSplit.chars,
       { "will-change": "opacity, transform", filter: "blur(8px)", opacity: 0, yPercent: 50 },
-      { delay: 0.4, opacity: 1, filter: "blur(0px)", yPercent: 0, stagger: 0.02, duration: 0.75, ease: "power1" }
+      { delay: 0.15, opacity: 1, filter: "blur(0px)", yPercent: 0, stagger: 0.015, duration: 0.5, ease: "power1" }
     );
 
-    gsap.to(descriptionRef.current, { opacity: 1, filter: "blur(0px)", duration: 1, delay: 0.9 });
-    gsap.to(buttonRef.current, { delay: 1.1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power1" });
-    gsap.to(tagsRef.current, { opacity: 1, filter: "blur(0px)", duration: 1, delay: 0.9 });
+    gsap.to(descriptionRef.current, { opacity: 1, filter: "blur(0px)", duration: 0.4, delay: 0.25 });
+    gsap.to(buttonRef.current, { delay: 0.35, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "power1" });
+    gsap.to(tagsRef.current, { opacity: 1, filter: "blur(0px)", duration: 0.4, delay: 0.25 });
   }, []);
 
   useEffect(() => {

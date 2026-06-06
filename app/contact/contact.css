@@ -146,3 +146,71 @@
     height: 65%;
     object-fit: contain;
 }
+
+@media (max-width: 768px) {
+    .contact {
+        padding-top: 28vw;
+        padding-bottom: 8vh;
+    }
+
+    .contact-content {
+        gap: 6vh;
+    }
+
+    .contact-content-top {
+        gap: 4vh;
+    }
+
+    .contact-content-row {
+        flex-direction: column;
+        gap: 6vh;
+    }
+
+    .contact-content-left,
+    .contact-content-right {
+        width: 100%;
+    }
+
+    .contact-content-right {
+        height: auto;
+        min-height: 0;
+        padding: 2vh 0 4vh;
+    }
+
+    .contact-content-right-image {
+        width: 65%;
+        height: auto;
+        max-height: 45vw;
+    }
+
+    .contact-content-top-item {
+        padding: 4vw;
+        gap: 3vw;
+    }
+
+    .contact-content-top-item-profile {
+        width: 14vw;
+        height: 14vw;
+        min-width: 48px;
+        min-height: 48px;
+    }
+
+    .contact-content-column-row {
+        gap: 2vw;
+    }
+
+    .contact-content-small-item {
+        padding: 3vw 2vw;
+    }
+
+    .contact-content-small-item-icon {
+        width: 5vw;
+        height: 5vw;
+        min-width: 18px;
+        min-height: 18px;
+    }
+
+    .contact-content-item {
+        padding: 3.5vw;
+    }
+}

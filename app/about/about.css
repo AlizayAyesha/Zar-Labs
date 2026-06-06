@@ -151,6 +151,11 @@
     filter: none;
 }
 
+.about-partner-card-media--cover .about-partner-card-image {
+    object-fit: cover;
+    padding: 0;
+}
+
 .about-partner-card-media--brand .about-partner-card-media-overlay {
     opacity: 0.35;
 }
@@ -860,6 +865,10 @@
 }
 
 @media (max-width: 768px) {
+    .about {
+        padding-top: 28vw;
+    }
+
     .about-what-we-do-list {
         grid-template-columns: 1fr;
     }
@@ -961,6 +970,30 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .about-sticky-item {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        position: relative;
+        top: auto;
+        padding: 6vw;
+        gap: 4vh;
+    }
+
+    .about-sticky-item-left,
+    .about-sticky-item-right {
+        width: 100%;
+        height: auto;
+    }
+
+    .about-sticky-item-right-imagebox {
+        height: 45vw;
+        min-height: 180px;
+    }
 }
 
 .about-consultation-cta {

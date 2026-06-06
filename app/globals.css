@@ -268,8 +268,8 @@ section {
 /* ANIMATION PRESETS */
 
 .opacity-blur {
-  opacity: 0;
-  filter: blur(8px);
+  opacity: 1;
+  filter: none;
 }
 
 .opacity {
@@ -851,6 +851,8 @@ section {
   display: flex;
   align-items: center;
   gap: 0.25vw;
+  text-decoration: none;
+  color: inherit;
 }
 
 .navigation-inside-left-image {
@@ -867,6 +869,14 @@ section {
 }
 
 .navigation-inside-right-mobile {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.navigation-mobile-menu {
   display: none;
 }
 
@@ -1084,6 +1094,22 @@ section {
 
 @media (max-width: 768px) {
 
+html,
+body {
+  overflow-x: hidden;
+}
+
+body.nav-menu-open {
+  overflow: hidden;
+}
+
+.about,
+.works,
+.contact {
+  height: fit-content !important;
+  overflow: visible !important;
+}
+
 /* HIDE ON DESKTOP/MOBILE */
 
 .hide-on-desktop {
@@ -1182,6 +1208,76 @@ section {
   width: 100%;
   height: 1px;
   background-color: white;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.navigation-inside-right-mobile.is-open .navigation-inside-right-mobile-line:nth-child(1) {
+  transform: translateY(1.75vw) rotate(45deg);
+}
+
+.navigation-inside-right-mobile.is-open .navigation-inside-right-mobile-line:nth-child(2) {
+  opacity: 0;
+}
+
+.navigation-inside-right-mobile.is-open .navigation-inside-right-mobile-line:nth-child(3) {
+  transform: translateY(-1.75vw) rotate(-45deg);
+}
+
+.navigation-mobile-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2vh;
+  position: fixed;
+  top: 20vw;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  padding: 6vw 5vw 10vh;
+  background: #000000;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.navigation-mobile-menu.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.navigation-mobile-menu-link {
+  width: 100%;
+  padding: 4vw 0;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: white;
+  font-family: "SF PRO DISPLAY 600", sans-serif;
+  font-size: 6vw;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navigation-mobile-menu-link--cta {
+  margin-top: 2vh;
+  padding: 4vw 5vw;
+  border: 1px solid rgba(var(--zar-green-rgb), 0.35);
+  border-radius: 999px;
+  background: rgba(var(--zar-green-rgb), 0.08);
+  color: var(--zar-green);
+  justify-content: center;
+  gap: 2vw;
+}
+
+.navigation-mobile-menu-link-icon {
+  width: 5vw;
+  height: 5vw;
 }
 
 /* BUTTONS */

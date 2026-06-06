@@ -11,39 +11,22 @@ import { SectionProjectsMobile } from "./SectionProjectsMobile";
 import { SectionKPI } from "./SectionKPI";
 import { ZarLabsLoader } from "./ZarLabsLoader";
 import "./main.css";
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { useProgress } from "@react-three/drei";
+import { useEffect, useState } from 'react';
 
 const Main = ({ videos = {} }) => {
 
-  const { progress } = useProgress();
   const [fadeOut, setFadeOut] = useState(false);
-  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
   const lenis = useLenis();
 
   useEffect(() => {
-    const timer = setTimeout(() => setMinTimeElapsed(true), 1200);
+    lenis?.start();
+    const timer = setTimeout(() => setFadeOut(true), 500);
     return () => clearTimeout(timer);
-  }, []);
-
-  useLayoutEffect(() => {
-    if (minTimeElapsed && progress >= 100) {
-      setFadeOut(true);
-      lenis?.start();
-    }
-  }, [progress, minTimeElapsed, lenis]);
-
-  useEffect(() => {
-    const fallback = setTimeout(() => {
-      setFadeOut(true);
-      lenis?.start();
-    }, 2000);
-    return () => clearTimeout(fallback);
   }, [lenis]);
 
   return (
     <ReactLenis root>
-      <ZarLabsLoader progress={progress} fadeOut={fadeOut} />
+      <ZarLabsLoader fadeOut={fadeOut} />
       <SectionHero />
       <div className="border-padding">
         <div className="section-border"></div>

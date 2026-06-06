@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 "use client";
 import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
@@ -19,6 +18,20 @@ export const Navigation = () => {
     const navigationBarCenterRef4 = useRef()
 
     useLayoutEffect(() => {
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        if (isMobile) {
+            gsap.set(navigationBar.current, {
+                opacity: 1,
+                rotateY: "0deg",
+                scale: "1",
+                rotateX: "0deg",
+                translateY: "0vh",
+                width: "100%",
+            });
+            return;
+        }
+
         gsap.to(navigationBar.current, { opacity: 1, rotateY: "0deg", scale: "1", rotateX: "0deg", translateY: "0vh", duration: 0.75, ease: 'power1', delay: 0.75 })
         gsap.fromTo(navigationBar.current, { width: "25%" }, { width: "100%", duration: 0.75, ease: "power1", delay: 1.75 })
         gsap.fromTo(navigationBarCenter.current, { display: "none" }, { display: "flex", duration: 0.01, delay: 1.75 })
@@ -32,23 +45,32 @@ export const Navigation = () => {
 
     const router = useRouter();
     const pathname = usePathname();
-    let isAnimating = false;
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
     const handleNavigate = (path) => {
+        setMobileMenuOpen(false);
         router.push(path);
     };
+
+    useEffect(() => {
+        setMobileMenuOpen(false);
+    }, [pathname]);
+
+    useEffect(() => {
+        document.body.classList.toggle('nav-menu-open', mobileMenuOpen);
+        return () => document.body.classList.remove('nav-menu-open');
+    }, [mobileMenuOpen]);
 
   return (
     <div className="navigation-wrapper">
         <div className="navigation-inside" ref={navigationBar} >
-            <div className="navigation-inside-left">
+            <Link href="/" className="navigation-inside-left" onClick={() => setMobileMenuOpen(false)} aria-label="Zar Labs home">
                 <img src="/images/zarlabs-logo.webp" className="navigation-inside-left-image" alt="Zar Labs" />
-            </div>
+            </Link>
             <div className="navigation-inside-big" ref={navigationBarCenter} >
                 <p className="small-description white hover-text-white opacity" ref={navigationBarCenterRef1} onClick={() => handleNavigate('/')} >Home</p>
                 <p className="small-description white hover-text-white opacity" ref={navigationBarCenterRef2} onClick={() => handleNavigate('/about')} >About</p>
                 <p className="small-description white hover-text-white opacity" ref={navigationBarCenterRef3} onClick={() => handleNavigate('/works')} >Works</p>
-                {/* <p className="small-description white hover-text-white opacity" ref={navigationBarCenterRef4} onClick={() => handleNavigate('/casestudies')} >Case Studies</p> */}
             </div>
             <div className="navigation-inside-right">
                 <button className="button button-navigation button-transparent-border" onClick={() => handleNavigate('/contact')} >
@@ -61,12 +83,30 @@ export const Navigation = () => {
                     </div>
                 </button>
             </div>
-            <div className="navigation-inside-right-mobile">
-                <div className="navigation-inside-right-mobile-line" />
-                <div className="navigation-inside-right-mobile-line" />
-                <div className="navigation-inside-right-mobile-line" />
-            </div>
+            <button
+                type="button"
+                className={`navigation-inside-right-mobile${mobileMenuOpen ? ' is-open' : ''}`}
+                onClick={() => setMobileMenuOpen((open) => !open)}
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={mobileMenuOpen}
+            >
+                <span className="navigation-inside-right-mobile-line" />
+                <span className="navigation-inside-right-mobile-line" />
+                <span className="navigation-inside-right-mobile-line" />
+            </button>
         </div>
+        <nav
+            className={`navigation-mobile-menu${mobileMenuOpen ? ' is-open' : ''}`}
+            aria-hidden={!mobileMenuOpen}
+        >
+            <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/')}>Home</button>
+            <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/about')}>About</button>
+            <button type="button" className="navigation-mobile-menu-link" onClick={() => handleNavigate('/works')}>Works</button>
+            <button type="button" className="navigation-mobile-menu-link navigation-mobile-menu-link--cta" onClick={() => handleNavigate('/contact')}>
+                Get In Touch
+                <ArrowUpRight className="navigation-mobile-menu-link-icon" />
+            </button>
+        </nav>
     </div>
   );
 };

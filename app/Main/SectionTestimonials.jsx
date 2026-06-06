@@ -51,7 +51,7 @@ export const SectionTestimonials = () => {
     });
   }, []);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true, align: "start" });
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } =
