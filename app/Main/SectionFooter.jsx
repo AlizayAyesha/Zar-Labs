@@ -29,6 +29,7 @@ const SERVICE_LINKS = [
 
 const RESOURCE_LINKS = [
   { label: "Project Intake", href: "/project-intake" },
+  { label: "Join Social Engine", href: "/join" },
   { label: "FAQ", href: "/faq" },
   { label: "Case Studies", href: "/works" },
   { label: "Book a Call", action: "calendly" },
