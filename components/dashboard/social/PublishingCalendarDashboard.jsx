@@ -1,0 +1,289 @@
+"use client";
+
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { usePublishingCalendar } from "../../../hooks/usePublishingCalendar";
+import { PUBLISHING_BRANDS } from "../../../constants/social/publishingBrands";
+import { getWeekDates, isToday } from "../../../lib/publishing-calendar/calendarDates";
+import { TaskChip } from "./publishing-calendar/TaskChip";
+import { ProductionPanelModal } from "./publishing-calendar/ProductionPanelModal";
+import { SyncStatusIndicator } from "../SyncStatusIndicator";
+
+export function PublishingCalendarDashboard() {
+  const {
+    tasks,
+    activity,
+    hydrated,
+    syncWarning,
+    syncing,
+    updateTask,
+    updatePanelState,
+    deleteTask,
+    duplicateTask,
+    rescheduleTask,
+    persistNow,
+    exportBackup,
+  } = usePublishingCalendar();
+
+  const [anchorDate, setAnchorDate] = useState(() => new Date());
+  const [viewMode, setViewMode] = useState("week");
+  const [rowMode, setRowMode] = useState("split");
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [dragTaskId, setDragTaskId] = useState(null);
+  const [brandFilter, setBrandFilter] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const weekDates = useMemo(() => getWeekDates(anchorDate), [anchorDate]);
+
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((t) => {
+      if (brandFilter.length && !brandFilter.includes(t.brand_id)) return false;
+      if (search.trim()) {
+        const q = search.toLowerCase();
+        const hay = `${t.task_title} ${t.channel} ${t.campaign_topic}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [tasks, brandFilter, search]);
+
+  const selectedTask = tasks.find((t) => t.id === selectedTaskId) || null;
+
+  function tasksForDate(isoDate, row) {
+    return filteredTasks.filter((t) => {
+      if (row === "post") return t.publishing_date === isoDate;
+      return (t.generation_slot_date || t.production_date) === isoDate;
+    });
+  }
+
+  function shiftWeek(delta) {
+    const d = new Date(anchorDate);
+    d.setDate(d.getDate() + delta * 7);
+    setAnchorDate(d);
+  }
+
+  function onDrop(date, row) {
+    if (!dragTaskId) return;
+    const patch =
+      row === "post"
+        ? { publishing_date: date }
+        : { generation_slot_date: date };
+    const result = rescheduleTask(dragTaskId, patch);
+    setDragTaskId(null);
+    if (result.conflicts?.warnings?.length) {
+      alert(result.conflicts.warnings.join("\n"));
+    }
+  }
+
+  const stats = useMemo(() => {
+    const byBrand = {};
+    for (const t of filteredTasks) {
+      byBrand[t.brand_shortcut] = (byBrand[t.brand_shortcut] || 0) + 1;
+    }
+    return { total: filteredTasks.length, byBrand };
+  }, [filteredTasks]);
+
+  if (!hydrated) {
+    return <div className="social-calendar-shell"><p className="admin-cms-placeholder">Loading calendar…</p></div>;
+  }
+
+  return (
+    <div className="social-calendar-shell tech-pattern-bg">
+      <header className="social-calendar-toolbar">
+        <div>
+          <h1>Schedule Calendar</h1>
+          <p>Publishing kanban — BUILD · AI · GROW · PROOF · Asia/Karachi</p>
+        </div>
+        <div className="dashboard-actions">
+          <button type="button" className={`dashboard-btn${viewMode === "week" ? " dashboard-btn-primary" : ""}`} onClick={() => setViewMode("week")}>
+            Week
+          </button>
+          <button type="button" className="dashboard-btn" onClick={() => shiftWeek(-1)}>
+            ← Prev
+          </button>
+          <button type="button" className="dashboard-btn" onClick={() => setAnchorDate(new Date())}>
+            Today
+          </button>
+          <button type="button" className="dashboard-btn" onClick={() => shiftWeek(1)}>
+            Next →
+          </button>
+          <Link href="/dashboard/social-media-management/topic-planner" className="dashboard-btn">
+            Topic Planner
+          </Link>
+          <button type="button" className="dashboard-btn" onClick={persistNow} disabled={syncing}>
+            {syncing ? "Syncing…" : "Sync now"}
+          </button>
+          <button
+            type="button"
+            className="dashboard-btn"
+            onClick={() => {
+              const blob = new Blob([exportBackup()], { type: "application/json" });
+              const a = document.createElement("a");
+              a.href = URL.createObjectURL(blob);
+              a.download = "zar-calendar-backup.json";
+              a.click();
+            }}
+          >
+            Export JSON
+          </button>
+        </div>
+      </header>
+
+      {syncWarning ? <div className="dashboard-alert dashboard-alert-error">{syncWarning}</div> : null}
+
+      <div className="social-calendar-filters">
+        <input
+          type="search"
+          className="admin-cms-search"
+          placeholder="Search title, channel, topic…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <div className="social-brand-filters">
+          {PUBLISHING_BRANDS.map((b) => (
+            <button
+              key={b.id}
+              type="button"
+              className={`dashboard-btn social-brand-filter${brandFilter.includes(b.id) ? " is-on" : ""}`}
+              onClick={() =>
+                setBrandFilter((prev) =>
+                  prev.includes(b.id) ? prev.filter((x) => x !== b.id) : [...prev, b.id]
+                )
+              }
+            >
+              {b.shortcut}
+            </button>
+          ))}
+          {brandFilter.length ? (
+            <button type="button" className="dashboard-btn" onClick={() => setBrandFilter([])}>
+              Clear
+            </button>
+          ) : null}
+        </div>
+        <div className="dashboard-actions">
+          <button type="button" className={`dashboard-btn${rowMode === "split" ? " dashboard-btn-primary" : ""}`} onClick={() => setRowMode("split")}>
+            Split rows
+          </button>
+          <button type="button" className={`dashboard-btn${rowMode === "post" ? " dashboard-btn-primary" : ""}`} onClick={() => setRowMode("post")}>
+            Post only
+          </button>
+          <button type="button" className={`dashboard-btn${rowMode === "gen" ? " dashboard-btn-primary" : ""}`} onClick={() => setRowMode("gen")}>
+            Gen only
+          </button>
+          <button type="button" className="dashboard-btn" onClick={() => setSidebarOpen((v) => !v)}>
+            {sidebarOpen ? "Hide" : "Show"} sidebar
+          </button>
+        </div>
+      </div>
+
+      <div className={`social-calendar-body${sidebarOpen ? "" : " social-calendar-body--full"}`}>
+        <div className="social-kanban-wrap">
+          <div className="social-kanban-header">
+            {weekDates.map((col) => (
+              <div key={col.date} className={`social-kanban-col-head${isToday(col.date) ? " is-today" : ""}`}>
+                {col.label}
+              </div>
+            ))}
+          </div>
+
+          {(rowMode === "split" || rowMode === "post") && (
+            <div className="social-kanban-row-label">Post</div>
+          )}
+          {(rowMode === "split" || rowMode === "post") && (
+            <div className="social-kanban-grid">
+              {weekDates.map((col) => (
+                <div
+                  key={`post-${col.date}`}
+                  className={`social-kanban-cell${isToday(col.date) ? " is-today" : ""}`}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => onDrop(col.date, "post")}
+                >
+                  {tasksForDate(col.date, "post").map((task) => (
+                    <TaskChip
+                      key={task.id}
+                      task={task}
+                      draggable
+                      onDragStart={() => setDragTaskId(task.id)}
+                      onClick={() => setSelectedTaskId(task.id)}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {(rowMode === "split" || rowMode === "gen") && (
+            <div className="social-kanban-row-label">Generation</div>
+          )}
+          {(rowMode === "split" || rowMode === "gen") && (
+            <div className="social-kanban-grid">
+              {weekDates.map((col) => (
+                <div
+                  key={`gen-${col.date}`}
+                  className={`social-kanban-cell${isToday(col.date) ? " is-today" : ""}`}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => onDrop(col.date, "gen")}
+                >
+                  {tasksForDate(col.date, "gen").map((task) => (
+                    <TaskChip
+                      key={task.id}
+                      task={task}
+                      draggable
+                      onDragStart={() => setDragTaskId(task.id)}
+                      onClick={() => setSelectedTaskId(task.id)}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {sidebarOpen ? (
+          <aside className="social-calendar-sidebar">
+            <div className="dashboard-card">
+              <h2>Week summary</h2>
+              <p>
+                <strong>{stats.total}</strong> tasks (filtered)
+              </p>
+              <ul className="social-sidebar-stats">
+                {Object.entries(stats.byBrand).map(([k, v]) => (
+                  <li key={k}>
+                    {k}: {v}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="dashboard-card">
+              <h2>Activity</h2>
+              <ul className="social-activity-list">
+                {activity.slice(0, 10).map((a) => (
+                  <li key={a.id}>
+                    <span>{a.action}</span>
+                    <time>{new Date(a.created_at).toLocaleString()}</time>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <SyncStatusIndicator lastSynced={syncing ? "Syncing…" : "Auto-save on"} onSync={persistNow} syncing={syncing} />
+          </aside>
+        ) : null}
+      </div>
+
+      {selectedTask ? (
+        <ProductionPanelModal
+          task={selectedTask}
+          onClose={() => setSelectedTaskId(null)}
+          onUpdatePanelState={updatePanelState}
+          onUpdateTask={updateTask}
+          onDelete={(id) => {
+            deleteTask(id);
+            setSelectedTaskId(null);
+          }}
+          onDuplicate={duplicateTask}
+        />
+      ) : null}
+    </div>
+  );
+}
