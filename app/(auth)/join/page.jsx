@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import DashboardLoginPage from "../dashboard/login/DashboardLoginClient";
+import DashboardLoginPage from "../../dashboard/login/DashboardLoginClient";
 
 export const metadata = {
   title: "Join Zar Labs Social Engine",

@@ -50,13 +50,34 @@ async function main() {
     process.exit(1);
   }
 
-  const connectionString =
-    process.env.SUPABASE_DB_URL ||
-    `postgresql://postgres.${projectRef}:${encodeURIComponent(password)}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`;
+  const urls = [
+    process.env.SUPABASE_DB_URL,
+    `postgresql://postgres.${projectRef}:${encodeURIComponent(password)}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`,
+    `postgresql://postgres.${projectRef}:${encodeURIComponent(password)}@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres`,
+    `postgresql://postgres:${encodeURIComponent(password)}@db.${projectRef}.supabase.co:5432/postgres`,
+  ].filter(Boolean);
 
-  const client = new pg.Client({ connectionString, ssl: { rejectUnauthorized: false } });
-  await client.connect();
-  console.log("Connected to Supabase Postgres");
+  let client;
+  let lastErr;
+  for (const connectionString of urls) {
+    try {
+      client = new pg.Client({ connectionString, ssl: { rejectUnauthorized: false } });
+      await client.connect();
+      console.log("Connected to Supabase Postgres");
+      break;
+    } catch (err) {
+      lastErr = err;
+      try {
+        await client?.end();
+      } catch {
+        /* ignore */
+      }
+      client = null;
+    }
+  }
+  if (!client) {
+    throw lastErr || new Error("Could not connect to Supabase Postgres");
+  }
 
   for (const rel of SQL_FILES) {
     const filePath = path.join(root, rel);

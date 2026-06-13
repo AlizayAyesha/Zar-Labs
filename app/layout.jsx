@@ -1,6 +1,6 @@
 import "./globals.css";
-import { Navigation } from "./Navigation";
 import { Providers } from "./Providers";
+import { SiteChrome } from "../components/SiteChrome";
 import { JsonLd } from "../components/seo/JsonLd";
 import { buildPageMetadata } from "../lib/seo/build-metadata";
 import { SAME_AS, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "../lib/seo/site";
@@ -45,8 +45,7 @@ export default function RootLayout({ children }) {
       <body>
         <JsonLd data={organizationSchema} />
         <Providers>
-          <Navigation />
-          {children}
+          <SiteChrome>{children}</SiteChrome>
         </Providers>
       </body>
     </html>
