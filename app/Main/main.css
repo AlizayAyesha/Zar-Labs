@@ -263,6 +263,13 @@
     user-select: none;
 }
 
+.hero-entity-definition {
+    max-width: 36rem;
+    margin: 0;
+    line-height: 155%;
+    opacity: 0.85;
+}
+
 .hero-titlebox {
     width: fit-content;
     height: fit-content;

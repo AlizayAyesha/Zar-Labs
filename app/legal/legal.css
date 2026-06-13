@@ -58,11 +58,24 @@
   padding-top: 0;
 }
 
+.faq-section-title {
+  margin: 3vh 0 1vh;
+  font-size: 1.35rem;
+  font-family: "SF PRO DISPLAY 600", sans-serif;
+  color: rgba(34, 197, 94, 0.95);
+}
+
 .faq-question {
   margin: 0 0 1vh;
   font-size: 1.1rem;
   font-family: "SF PRO DISPLAY 600", sans-serif;
   color: white;
+}
+
+.legal-inline-link {
+  color: rgba(34, 197, 94, 0.95);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .faq-answer {

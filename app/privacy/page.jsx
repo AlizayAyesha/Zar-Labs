@@ -1,9 +1,11 @@
 import { LegalPageLayout } from "../legal/LegalPageLayout";
+import { buildPageMetadata } from "../../lib/seo/build-metadata";
 
-export const metadata = {
-  title: "Zar Labs | Privacy Policy",
+export const metadata = buildPageMetadata({
+  title: "Privacy Policy",
   description: "How Zar Labs collects, uses, and protects your information.",
-};
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (
@@ -13,30 +15,24 @@ export default function PrivacyPage() {
         Zar Labs respects your privacy. This policy explains what information we collect and how we use it
         when you visit our website or contact us.
       </p>
-      <h2>Information We Collect</h2>
+      <h2>Information we collect</h2>
       <ul>
-        <li>Contact details you submit (name, email, company, message).</li>
-        <li>Scheduling data when you book a call through Calendly.</li>
+        <li>Contact details you submit (name, email, phone, project details).</li>
+        <li>Newsletter email if you subscribe at /newsletter.</li>
         <li>Basic usage analytics such as pages visited, device type, and referral source.</li>
       </ul>
-      <h2>How We Use Information</h2>
-      <ul>
-        <li>Respond to inquiries and provide requested services.</li>
-        <li>Improve website performance, security, and user experience.</li>
-        <li>Send service-related communications you request or reasonably expect.</li>
-      </ul>
-      <h2>Sharing</h2>
+      <h2>How we use information</h2>
       <p>
-        We do not sell personal information. We may share data with trusted providers (e.g., hosting,
-        analytics, scheduling) solely to operate our business.
+        We use your information to respond to inquiries, deliver services, send newsletter briefs you opt into,
+        and improve our website. We do not sell personal data.
       </p>
-      <h2>Your Rights</h2>
+      <h2>Third parties</h2>
       <p>
-        You may request access, correction, or deletion of your personal information by emailing
-        zarlabsteam@gmail.com.
+        We may use hosting, form processing (Formspree), scheduling (Calendly), database (Supabase), and
+        analytics providers solely to operate our business.
       </p>
       <h2>Contact</h2>
-      <p>Zar Labs — Karachi, Pakistan — zarlabsteam@gmail.com</p>
+      <p>Privacy questions: zarlabsteam@gmail.com</p>
     </LegalPageLayout>
   );
 }

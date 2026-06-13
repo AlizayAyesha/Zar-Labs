@@ -19,7 +19,7 @@ export const SectionServices = ({ videoSrc = "/videos/serviceshighquality.mp4" }
 
           <div className="titlebox">
             <div className="titlebox-gradient accent-gold" />
-            <h1 className="subheadline white">Your Digital Powerhouse</h1>
+            <h2 className="subheadline white">Your Digital Powerhouse</h2>
           </div>
 
           <p className="description grey">

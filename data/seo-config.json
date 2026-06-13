@@ -1,0 +1,16 @@
+{
+  "indexingEnabled": true,
+  "siteName": "Zar Labs",
+  "titleTemplate": "Zar Labs | %s",
+  "defaultTitle": "Zar Labs | Custom Software, AI & Digital Transformation",
+  "defaultDescription": "Technology partner for custom software, SaaS, AI automation, and cloud infrastructure—built for measurable business outcomes.",
+  "defaultOgImage": "/og-image.jpg",
+  "twitterHandle": "@zarlabs",
+  "organizationName": "Zar Labs",
+  "organizationLogo": "/images/zarlabs-logo.webp",
+  "organizationSameAs": [
+    "https://www.instagram.com/zar_labs/",
+    "https://x.com/zarlabs"
+  ],
+  "pageOverrides": {}
+}

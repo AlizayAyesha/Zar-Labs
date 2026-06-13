@@ -1,9 +1,11 @@
 import { LegalPageLayout } from "../legal/LegalPageLayout";
+import { buildPageMetadata } from "../../lib/seo/build-metadata";
 
-export const metadata = {
-  title: "Zar Labs | Terms of Service",
+export const metadata = buildPageMetadata({
+  title: "Terms of Service",
   description: "Terms of Service for Zar Labs website and professional services.",
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (
@@ -34,7 +36,7 @@ export default function TermsPage() {
         damages arising from use of the website or services.
       </p>
       <h2>Contact</h2>
-      <p>Questions about these terms: zarlabsteam@gmail.com</p>
+      <p>Questions: zarlabsteam@gmail.com</p>
     </LegalPageLayout>
   );
 }

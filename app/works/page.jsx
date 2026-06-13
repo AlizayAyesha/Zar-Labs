@@ -1,19 +1,16 @@
 import "./works.css";
 import { WorksPageSection } from "./WorksPageSection";
+import { buildPageMetadata } from "../../lib/seo/build-metadata";
 
-export const metadata = {
-  title: 'Zar Labs | Works',
-  description: "Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality.",
-  openGraph: {
-    title: 'Works',
-  },
-}
+export const metadata = buildPageMetadata({
+  title: "Works & Case Studies",
+  description:
+    "Explore Zar Labs portfolio: AI automation, SaaS platforms, ERP integrations, cloud migrations, and web design case studies with measurable outcomes.",
+  path: "/works",
+});
 
 const Works = () => {
-
-  return (
-    <WorksPageSection />
-  );
+  return <WorksPageSection />;
 };
 
 export default Works;

@@ -1,9 +1,11 @@
 import { LegalPageLayout } from "../legal/LegalPageLayout";
+import { buildPageMetadata } from "../../lib/seo/build-metadata";
 
-export const metadata = {
-  title: "Zar Labs | Cookie Policy",
+export const metadata = buildPageMetadata({
+  title: "Cookie Policy",
   description: "Cookie and tracking information for the Zar Labs website.",
-};
+  path: "/cookies",
+});
 
 export default function CookiesPage() {
   return (
@@ -13,19 +15,14 @@ export default function CookiesPage() {
         This site uses cookies and similar technologies to keep the website functional, understand usage,
         and improve performance.
       </p>
-      <h2>Types of Cookies</h2>
+      <h2>Types of cookies</h2>
       <ul>
-        <li><strong>Essential:</strong> Required for core site functionality and security.</li>
-        <li><strong>Analytics:</strong> Help us understand traffic patterns and page performance.</li>
-        <li><strong>Third-party:</strong> Scheduling embeds (such as Calendly) may set their own cookies.</li>
+        <li>Essential cookies for navigation and security.</li>
+        <li>Preference cookies (e.g. cookie consent choice).</li>
+        <li>Analytics cookies when you accept and analytics is enabled.</li>
       </ul>
-      <h2>Managing Cookies</h2>
-      <p>
-        You can control cookies through your browser settings. Disabling essential cookies may affect
-        site functionality.
-      </p>
-      <h2>Contact</h2>
-      <p>Questions: zarlabsteam@gmail.com</p>
+      <h2>Managing cookies</h2>
+      <p>You can control cookies through your browser settings. Blocking essential cookies may affect site functionality.</p>
     </LegalPageLayout>
   );
 }

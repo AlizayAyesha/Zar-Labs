@@ -124,7 +124,7 @@ export const SectionProjects = () => {
         </div>
         <div className="titlebox">
           <div className="titlebox-big-gradient" />
-          <h1 className="subheadline white">Pioneering Projects That Consistently <br className="hide-on-mobile" /> Redefine What’s Possible</h1>
+          <h2 className="subheadline white">Pioneering Projects That Consistently <br className="hide-on-mobile" /> Redefine What’s Possible</h2>
         </div>
         <p className="description grey">Transforming startups, SMEs, and industry <br className="hide-on-desktop" /> giants into digital leaders.</p>
       </div>

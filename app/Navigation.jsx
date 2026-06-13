@@ -61,6 +61,10 @@ export const Navigation = () => {
         return () => document.body.classList.remove('nav-menu-open');
     }, [mobileMenuOpen]);
 
+    if (pathname?.startsWith("/dashboard") || pathname?.startsWith("/auth")) {
+        return null;
+    }
+
   return (
     <>
         <div className={`navigation-wrapper${mobileMenuOpen ? ' navigation-wrapper--menu-open' : ''}`}>

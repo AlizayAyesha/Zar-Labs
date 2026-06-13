@@ -1,0 +1,5 @@
+import { buildDefaultNewsletterRegistry } from "../../lib/newsletter/registry";
+
+export default {
+  newsletter_posts_registry: buildDefaultNewsletterRegistry(),
+};

@@ -78,7 +78,10 @@ export const ProjectIntakePage = () => {
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || "Could not send your brief. Please try again.");
+        const fieldError = Array.isArray(data.errors)
+          ? data.errors.map((e) => e.message).filter(Boolean).join(" ")
+          : "";
+        throw new Error(fieldError || data.error || "Could not send your brief. Please try again.");
       }
 
       setSubmitted(true);
@@ -121,16 +124,16 @@ export const ProjectIntakePage = () => {
           <form className="project-intake-form" onSubmit={handleSubmit}>
             <FormBlock num="01" title="Contact information">
               <Field label="Full name *" htmlFor="name">
-                <input id="name" className="project-intake-input" required value={form.fullName} onChange={(e) => update("fullName", e.target.value)} />
+                <input id="name" name="name" className="project-intake-input" required value={form.fullName} onChange={(e) => update("fullName", e.target.value)} />
               </Field>
               <Field label="Business email *" htmlFor="email">
-                <input id="email" type="email" className="project-intake-input" required value={form.email} onChange={(e) => update("email", e.target.value)} />
+                <input id="email" name="email" type="email" className="project-intake-input" required value={form.email} onChange={(e) => update("email", e.target.value)} />
               </Field>
               <Field label="Company *" htmlFor="company">
-                <input id="company" className="project-intake-input" required value={form.company} onChange={(e) => update("company", e.target.value)} />
+                <input id="company" name="company" className="project-intake-input" required value={form.company} onChange={(e) => update("company", e.target.value)} />
               </Field>
               <Field label="Phone" htmlFor="phone">
-                <input id="phone" className="project-intake-input" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
+                <input id="phone" name="phone" className="project-intake-input" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
               </Field>
             </FormBlock>
 
@@ -152,7 +155,7 @@ export const ProjectIntakePage = () => {
                 ))}
               </div>
               <Field label="Website / platform scope *" htmlFor="scope" full>
-                <select id="scope" className="project-intake-select" required value={form.websiteScope} onChange={(e) => update("websiteScope", e.target.value)}>
+                <select id="scope" name="website_scope" className="project-intake-select" required value={form.websiteScope} onChange={(e) => update("websiteScope", e.target.value)}>
                   <option value="">Select project type…</option>
                   {WEBSITE_SCOPE_OPTIONS.map(({ value, label }) => (
                     <option key={value} value={value}>{label}</option>
@@ -160,10 +163,10 @@ export const ProjectIntakePage = () => {
                 </select>
               </Field>
               <Field label="Estimated number of pages" htmlFor="pages">
-                <input id="pages" type="number" min="1" className="project-intake-input" placeholder="e.g. 12" value={form.pageCount} onChange={(e) => update("pageCount", e.target.value)} />
+                <input id="pages" name="page_count" type="number" min="1" className="project-intake-input" placeholder="e.g. 12" value={form.pageCount} onChange={(e) => update("pageCount", e.target.value)} />
               </Field>
               <Field label="CTA banners needed" htmlFor="cta">
-                <input id="cta" className="project-intake-input" placeholder="e.g. 3" value={form.ctaBannerCount} onChange={(e) => update("ctaBannerCount", e.target.value)} />
+                <input id="cta" name="cta_banners" className="project-intake-input" placeholder="e.g. 3" value={form.ctaBannerCount} onChange={(e) => update("ctaBannerCount", e.target.value)} />
               </Field>
             </FormBlock>
 
@@ -185,13 +188,13 @@ export const ProjectIntakePage = () => {
                 ))}
               </div>
               <Field label="Color palette" htmlFor="colors">
-                <input id="colors" className="project-intake-input" placeholder="#22c55e, #010101, white" value={form.colorPalette} onChange={(e) => update("colorPalette", e.target.value)} />
+                <input id="colors" name="color_palette" className="project-intake-input" placeholder="#22c55e, #010101, white" value={form.colorPalette} onChange={(e) => update("colorPalette", e.target.value)} />
               </Field>
               <Field label="Typography / fonts" htmlFor="fonts">
-                <input id="fonts" className="project-intake-input" placeholder="Preferred fonts or style" value={form.typography} onChange={(e) => update("typography", e.target.value)} />
+                <input id="fonts" name="typography" className="project-intake-input" placeholder="Preferred fonts or style" value={form.typography} onChange={(e) => update("typography", e.target.value)} />
               </Field>
               <Field label="Design direction" htmlFor="design" full>
-                <select id="design" className="project-intake-select" value={form.designStyle} onChange={(e) => update("designStyle", e.target.value)}>
+                <select id="design" name="design_style" className="project-intake-select" value={form.designStyle} onChange={(e) => update("designStyle", e.target.value)}>
                   <option value="">Select design direction…</option>
                   {DESIGN_STYLE_OPTIONS.map(({ value, label }) => (
                     <option key={value} value={value}>{label}</option>
@@ -199,7 +202,7 @@ export const ProjectIntakePage = () => {
                 </select>
               </Field>
               <Field label="Animation level" htmlFor="animation" full>
-                <select id="animation" className="project-intake-select" value={form.animationLevel} onChange={(e) => update("animationLevel", e.target.value)}>
+                <select id="animation" name="animation_level" className="project-intake-select" value={form.animationLevel} onChange={(e) => update("animationLevel", e.target.value)}>
                   <option value="">Select animation level…</option>
                   {ANIMATION_OPTIONS.map(({ value, label }) => (
                     <option key={value} value={value}>{label}</option>
@@ -207,7 +210,7 @@ export const ProjectIntakePage = () => {
                 </select>
               </Field>
               <Field label="Newsletter module" htmlFor="newsletter" full>
-                <select id="newsletter" className="project-intake-select" value={form.newsletter} onChange={(e) => update("newsletter", e.target.value)}>
+                <select id="newsletter" name="newsletter" className="project-intake-select" value={form.newsletter} onChange={(e) => update("newsletter", e.target.value)}>
                   <option value="">Select…</option>
                   <option value="yes">Yes — include newsletter</option>
                   <option value="no">No — not needed</option>
@@ -248,10 +251,10 @@ export const ProjectIntakePage = () => {
                 ))}
               </div>
               <Field label="Integrations & data workflows" htmlFor="integrations" full>
-                <textarea id="integrations" className="project-intake-textarea" placeholder="Google Sheets, help center, CRM sync, user records, third-party apps…" value={form.integrationsNotes} onChange={(e) => update("integrationsNotes", e.target.value)} />
+                <textarea id="integrations" name="integrations" className="project-intake-textarea" placeholder="Google Sheets, help center, CRM sync, user records, third-party apps…" value={form.integrationsNotes} onChange={(e) => update("integrationsNotes", e.target.value)} />
               </Field>
               <Field label="Security requirements" htmlFor="security" full>
-                <textarea id="security" className="project-intake-textarea" placeholder="IP/device tracking, access controls, compliance needs…" value={form.securityNotes} onChange={(e) => update("securityNotes", e.target.value)} />
+                <textarea id="security" name="security" className="project-intake-textarea" placeholder="IP/device tracking, access controls, compliance needs…" value={form.securityNotes} onChange={(e) => update("securityNotes", e.target.value)} />
               </Field>
             </FormBlock>
 
@@ -261,10 +264,10 @@ export const ProjectIntakePage = () => {
               description="Share copy you already have, or anything else we should know before consultation."
             >
               <Field label="Website content / copy brief" htmlFor="content" full>
-                <textarea id="content" className="project-intake-textarea project-intake-textarea--large" placeholder="Homepage messaging, service descriptions, about copy, product details…" value={form.clientContent} onChange={(e) => update("clientContent", e.target.value)} />
+                <textarea id="content" name="client_content" className="project-intake-textarea project-intake-textarea--large" placeholder="Homepage messaging, service descriptions, about copy, product details…" value={form.clientContent} onChange={(e) => update("clientContent", e.target.value)} />
               </Field>
               <Field label="Additional notes" htmlFor="notes" full>
-                <textarea id="notes" className="project-intake-textarea" placeholder="Timeline, budget range, competitors you admire, must-have features…" value={form.additionalNotes} onChange={(e) => update("additionalNotes", e.target.value)} />
+                <textarea id="notes" name="additional_notes" className="project-intake-textarea" placeholder="Timeline, budget range, competitors you admire, must-have features…" value={form.additionalNotes} onChange={(e) => update("additionalNotes", e.target.value)} />
               </Field>
             </FormBlock>
 

@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import "./cookie-consent.css";
 
 const CONSENT_KEY = "zarlabs-cookie-consent";
 
 export const CookieConsent = () => {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -21,7 +23,9 @@ export const CookieConsent = () => {
     setVisible(false);
   };
 
-  if (!visible) return null;
+  if (pathname?.startsWith("/dashboard") || !visible) {
+    return null;
+  }
 
   return (
     <div className="cookie-consent" role="dialog" aria-live="polite" aria-label="Cookie consent">

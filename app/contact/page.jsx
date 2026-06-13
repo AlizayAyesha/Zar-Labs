@@ -1,19 +1,16 @@
 import "./contact.css";
 import { ContactPageSection } from "./ContactPageSection";
+import { buildPageMetadata } from "../../lib/seo/build-metadata";
 
-export const metadata = {
-  title: 'Zar Labs | Get in Touch',
-  description: "Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality.",
-  openGraph: {
-    title: 'Get in Touch',
-  },
-}
+export const metadata = buildPageMetadata({
+  title: "Get in Touch",
+  description:
+    "Contact Zar Labs for custom software, AI automation, and digital projects. Email, phone, or book a discovery call—we respond within one business day.",
+  path: "/contact",
+});
 
 const Contact = () => {
-
-  return (
-    <ContactPageSection />
-  );
+  return <ContactPageSection />;
 };
 
 export default Contact;

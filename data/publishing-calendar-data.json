@@ -1,0 +1,11 @@
+{
+  "tasks": [],
+  "activity": [],
+  "schedulingConfig": {
+    "timezone": "Asia/Karachi",
+    "maxTasksPerDay": 6,
+    "leadTimeDays": 2,
+    "skipWeekends": false
+  },
+  "updatedAt": ""
+}

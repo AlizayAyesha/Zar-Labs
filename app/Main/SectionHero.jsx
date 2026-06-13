@@ -99,6 +99,10 @@ export const SectionHero = () => {
               <p className="big-description grey opacity-blur">
                 Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality
               </p>
+              <p className="small-description hero-entity-definition grey opacity-blur">
+                <strong>Zar Labs</strong> — custom software, SaaS platforms, AI automation, and integrations
+                for businesses that need measurable outcomes.
+              </p>
             </div>
             <div className="hero-buttons-row">
               <button

@@ -16,7 +16,7 @@ export const SectionDiscover = () => {
           </div>
           <div className="titlebox">
             <div className="titlebox-gradient" />
-            <h1 className="subheadline white">Discover Who We Are & What We Build</h1>
+            <h2 className="subheadline white">Discover Who We Are & What We Build</h2>
           </div>
           <p className="description grey">
             Learn about our team, process, and the digital solutions we&apos;ve built for clients across industries.

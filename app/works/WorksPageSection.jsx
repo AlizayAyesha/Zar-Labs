@@ -493,7 +493,7 @@ function WorksPageBody() {
               </div>
               <div className="titlebox">
                 <div className="titlebox-medium-gradient" />
-                <h1 className="subheadline white" ref={subtitleRef1} >We have extensive experience <br /> across multiple industries</h1>
+                <h2 className="subheadline white" ref={subtitleRef1} >We have extensive experience <br /> across multiple industries</h2>
               </div>
               <p className="description grey" ref={subdescriptionRef1} >Our product designers have completed projects in different niches. They know how to add business value and provide.</p>
             </div>
@@ -553,7 +553,7 @@ function WorksPageBody() {
               </div>
               <div className="titlebox">
                 <div className="titlebox-medium-gradient" />
-                <h1 className="subheadline white" ref={subtitleRef2} >We have a diverse portfolio of <br /> successful case studies</h1>
+                <h2 className="subheadline white" ref={subtitleRef2} >We have a diverse portfolio of <br /> successful case studies</h2>
               </div>
               <p className="description grey" ref={subdescriptionRef2} >Real projects across AI, SaaS, integrations, cloud, analytics, and growth — see how we deliver measurable results.</p>
             </div>

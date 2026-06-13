@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Calendar, Instagram, Mail, MapPin, Phone, Twitter } from "lucide-react";
 import { useCalendly } from "./CalendlyProvider";
 import { ZAR_LABS_EMAIL, ZAR_LABS_PHONE, ZAR_LABS_PHONE_DISPLAY } from "../config/contact";
+import { NewsletterSignup } from "../../components/NewsletterSignup";
+import "../newsletter/newsletter.css";
 
 const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://www.instagram.com/zar_labs/", Icon: Instagram },
@@ -80,8 +82,8 @@ export const SectionFooter = () => {
       <div className="footer-content">
         <div className="footer-content-left">
           <img src="/images/zarlabs-logo.webp" className="footer-logo" alt="Zar Labs" />
-          <h1 className="subheadline white">Zar Labs</h1>
-          <p className="description grey footer-tagline">
+          <h2 className="subheadline white">Zar Labs</h2>
+          <p className="description grey">
             Technology partner for custom software, AI automation, and digital transformation—built for measurable business outcomes.
           </p>
           <div className="footer-contact-info">
@@ -105,6 +107,10 @@ export const SectionFooter = () => {
             </div>
           </div>
           <div className="footer-socials footer-socials--brand">
+          <div className="footer-newsletter">
+            <h3 className="footer-newsletter-title">Newsletter — latest topics</h3>
+            <NewsletterSignup compact source="footer" />
+          </div>
             {SOCIAL_LINKS.map(({ label, href, Icon }) => (
               <a
                 key={label}

@@ -164,32 +164,32 @@ export const SectionFlower = () => {
         <div className="flower-content-textbox">
           <div className="flower-content-textbox-item">
             <span>
-              <h1 className="subheadline white">Grow</h1>
+              <p className="subheadline white" aria-hidden="true">Grow</p>
             </span>
             <span>
-              <h1 className="subheadline white">Your</h1>
+              <p className="subheadline white" aria-hidden="true">Your</p>
             </span>
             <span>
-              <h1 className="subheadline white">Digital</h1>
-            </span>
-          </div>
-          <div className="flower-content-textbox-item">
-            <span>
-              <h1 className="subheadline white">Presence,</h1>
-            </span>
-            <span>
-              <h1 className="subheadline white">Let</h1>
-            </span>
-            <span>
-              <h1 className="subheadline white">Your</h1>
+              <p className="subheadline white" aria-hidden="true">Digital</p>
             </span>
           </div>
           <div className="flower-content-textbox-item">
             <span>
-              <h1 className="subheadline white">Vision</h1>
+              <p className="subheadline white" aria-hidden="true">Presence,</p>
             </span>
             <span>
-              <h1 className="subheadline white">Bloom</h1>
+              <p className="subheadline white" aria-hidden="true">Let</p>
+            </span>
+            <span>
+              <p className="subheadline white" aria-hidden="true">Your</p>
+            </span>
+          </div>
+          <div className="flower-content-textbox-item">
+            <span>
+              <p className="subheadline white" aria-hidden="true">Vision</p>
+            </span>
+            <span>
+              <p className="subheadline white" aria-hidden="true">Bloom</p>
             </span>
           </div>
         </div>

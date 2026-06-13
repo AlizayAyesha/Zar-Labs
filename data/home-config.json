@@ -1,0 +1,24 @@
+{
+  "hero": {
+    "heading": "Crafting Digital Masterpieces",
+    "description": "Harnessing Cutting-Edge Visualization Technology to Transform Vision into Tailored Digital Reality",
+    "primaryCta": "Get In Touch",
+    "primaryLink": "/contact",
+    "secondaryCta": "",
+    "secondaryLink": "",
+    "serviceTags": ["AI", "SaaS", "Cloud", "Integration", "Automation", "DevOps", "Analytics"]
+  },
+  "discover": {
+    "enabled": true,
+    "aboutLabel": "About us",
+    "worksLabel": "Works"
+  },
+  "featuredProjects": {
+    "showProjects": true,
+    "showCaseStudies": true
+  },
+  "newsletter": {
+    "footerEnabled": true,
+    "headline": "Stay ahead on AI, GEO, and product strategy"
+  }
+}

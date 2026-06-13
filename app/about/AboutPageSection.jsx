@@ -164,9 +164,9 @@ export const AboutPageSection = () => {
         <div className="about-content">
             <div className="about-whyus">
                 <p className="description about-whyus-description grey">Why us</p>
-                <h2 className="headline about-whyus-headline white" ref={headlineRef}>
+                <h1 className="headline about-whyus-headline white" ref={headlineRef}>
                     About <span className="accent-green">Zar Labs</span>
-                </h2>
+                </h1>
                 <div className="about-whyus-body" ref={bodyRef}>
                     <div className="about-whyus-image-col">
                         <div className="about-whyus-imageframe" ref={imageRef}>
@@ -237,9 +237,9 @@ export const AboutPageSection = () => {
             <AboutPartnersSection sectionRef={partnersRef} />
             <div className="about-divider" />
             <div className="about-services-intro">
-                <h1 className="headline about-services-heading white">
+                <h2 className="headline about-services-heading white">
                     Services <span className="accent-green">we provide</span>
-                </h1>
+                </h2>
             </div>
             <div className="about-sticky-container" ref={stickyContainerRef}>
                 {STICKY_SERVICES.map((service) => (
@@ -249,10 +249,10 @@ export const AboutPageSection = () => {
                     >
                         <div className="about-sticky-item-left">
                             <div className="about-sticky-item-left-textbox">
-                                <h1 className="headline white">{service.title}</h1>
+                                <h3 className="headline white">{service.title}</h3>
                                 <p className="about-sticky-item-left-textbox-description grey">{service.description}</p>
                             </div>
-                            <h1 className="headline white">({service.num})</h1>
+                            <p className="headline white" aria-hidden="true">({service.num})</p>
                         </div>
                         <div className="about-sticky-item-right">
                             <div className="about-sticky-item-right-imagebox">

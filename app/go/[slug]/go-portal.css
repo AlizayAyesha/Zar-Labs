@@ -1,0 +1,135 @@
+.go-portal {
+  min-height: 100vh;
+  background: #0a140c;
+  color: #f5f5f5;
+  padding: 3rem 1.25rem 4rem;
+}
+
+.go-portal-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.go-portal-eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #22c55e;
+  margin: 0 0 0.75rem;
+}
+
+.go-portal h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+
+.go-portal-sub {
+  font-size: 1.05rem;
+  color: #bbb;
+  line-height: 1.6;
+  margin: 0 0 1.5rem;
+}
+
+.go-portal-trust {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.go-portal-trust li::before {
+  content: "✓ ";
+  color: #22c55e;
+}
+
+.go-portal-cta {
+  display: inline-block;
+  padding: 0.85rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: #22c55e;
+  color: #0a140c;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 2.5rem;
+}
+
+.go-portal-cta:hover {
+  background: #16a34a;
+}
+
+.go-portal-tiers h2,
+.go-portal-faq h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+  color: #ccc;
+}
+
+.go-portal-tier-grid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 600px) {
+  .go-portal-tier-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+.go-portal-tier {
+  border: 1px solid #2a3d2e;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #0f1a12;
+}
+
+.go-portal-tier--highlight {
+  border-color: #22c55e;
+}
+
+.go-portal-tier h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.go-portal-tier-price {
+  color: #22c55e;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.go-portal-faq-item {
+  margin-bottom: 1.25rem;
+}
+
+.go-portal-faq dt {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.go-portal-faq dd {
+  margin: 0;
+  color: #aaa;
+  line-height: 1.55;
+}
+
+.go-portal-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #222;
+  font-size: 0.9rem;
+}
+
+.go-portal-footer a {
+  color: #22c55e;
+  text-decoration: none;
+}
+
+.go-portal-footer a:hover {
+  text-decoration: underline;
+}

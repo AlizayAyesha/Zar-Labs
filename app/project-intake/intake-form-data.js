@@ -169,6 +169,7 @@ export const buildFormspreePayload = (form) => {
     security: form.securityNotes || "—",
     client_content: form.clientContent || "—",
     additional_notes: form.additionalNotes || "—",
-    full_report: buildEmailBody(form),
+    page_path: "/project-intake",
+    message: buildEmailBody(form),
   };
 };

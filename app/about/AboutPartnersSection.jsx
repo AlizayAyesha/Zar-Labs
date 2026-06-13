@@ -82,9 +82,9 @@ export const AboutPartnersSection = ({ sectionRef }) => (
     <div className="about-partners-glow" aria-hidden="true" />
     <header className="about-partners-header">
       <p className="about-partners-eyebrow">Strategic Ecosystem</p>
-      <h1 className="headline about-partners-title white">
+      <h2 className="headline about-partners-title white">
         Strategic Partners &amp; <span className="accent-green">Joint Ventures</span>
-      </h1>
+      </h2>
       <p className="about-partners-subheading grey">
         Through strategic partnerships and specialized ventures, Zar Labs delivers comprehensive solutions
         spanning software engineering, enterprise consulting, digital transformation, branding, creative
